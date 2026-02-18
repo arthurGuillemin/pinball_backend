@@ -28,3 +28,6 @@ app.use("/api/scores", scoresRouter);
 httpServer.listen(PORT, () => {
   console.log(`Serveur lancé sur le port ${PORT}`);
 });
+
+
+export { app, httpServer } 
