@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Backend du projet pinball , websocket pour la communication esp32 > playglass , playglass > dmd > backglass et api pour la gestion des high scores",
   "main": "index.js",
-  "type":"module" ,
+  "type": "module",
   "scripts": {
     "test": "echo \"Pas encorfe de tests implementes\" && exit 1",
     "start": "node src/index.js",
@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/arthurGuillemin/pinball_backend#readme",
   "dependencies": {
+    "@supabase/supabase-js": "^2.96.0",
     "dotenv": "^17.3.1",
     "express": "^5.2.1",
     "socket.io": "^4.8.3"
