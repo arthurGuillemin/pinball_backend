@@ -1,18 +1,15 @@
 import { WebSocketServer } from 'ws';
-
-
-
-
 import mqtt from "mqtt"; // import namespace "mqtt"
+
+
+// import { add, subtract } from './add.mjs';
+// console.log(add(5, 3)); // 8
+
+
 let client = mqtt.connect("mqtt://captain.dev0.pandor.cloud:1884"); // create a client
-
-
-import { add, subtract } from './add.mjs';
-
-console.log(add(5, 3)); // 8
-
-
 const topic = "classroom/Younes";
+const clientsList = [];
+const PORT = 8080;
 
 client.on("connect", () => {
     client.subscribe(topic, (err) => {
@@ -27,9 +24,9 @@ client.on("message", (topic, message) => {
     const telemetry = JSON.parse(message.toString());
     console.log(telemetry);
 
-    // webSocketClients.forEach((ws) => {
-    //     ws.send(JSON.stringify(telemetry));
-    // });
+    clientsList.forEach((ws) => {
+        ws.send(JSON.stringify(telemetry));
+    });
 });
 
 client.on("disconnect", function (e) {
@@ -40,12 +37,14 @@ client.on("error", function (e) {
     console.log("my error")
 })
 
-const wss = new WebSocketServer({ port: 8080 });
-console.log("WebSocket Server on ws://localhost:8080");
+
+
+const wss = new WebSocketServer({ port: PORT });
+console.log("WebSocket Server on ws://localhost:" + PORT);
 
 wss.on("connection", (ws) => {
     console.log("Client Connected");
-    // webSocketClients.push(ws);
+    clientsList.push(ws);
 });
 
 
