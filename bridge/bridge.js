@@ -2,9 +2,6 @@ import { WebSocketServer } from 'ws';
 import mqtt from "mqtt"; // import namespace "mqtt"
 
 
-// import { add, subtract } from './add.mjs';
-// console.log(add(5, 3)); // 8
-
 
 let client = mqtt.connect("mqtt://captain.dev0.pandor.cloud:1884"); // create a client
 const topic = "classroom/Younes";
