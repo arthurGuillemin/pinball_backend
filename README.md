@@ -1,6 +1,6 @@
 # Pinball Backend — Serveur Central
 
-Serveur Node.js centralisant la logique du flipper virtuel : API REST pour les scores, WebSockets pour la communication en temps réel entre les trois écrans (Playfield, Backglass, DMD) et les contrôleurs ESP32.
+Serveur Node.js  centralisant la logique du flipper virtuel : API REST pour les scores, WebSockets pour la communication en temps réel entre les trois écrans (Playfield, Backglass, DMD) et les contrôleurs ESP32.
 
 ---
 
@@ -116,3 +116,4 @@ Deux namespaces Socket.io seront implémentés :
 
 - `/screens` — Synchronisation entre Playfield, Backglass et DMD
 - `/controllers` — Réception des inputs depuis les ESP32 (flippers, start, nudge)
+
