@@ -2,12 +2,13 @@
 
 
 var socket;
-let uri = "ws://localhost:8080";
+let uri = "ws://locahost:8080";
 
 
 
 window.onload = function () {
-    socket = new ClientSocket();
+    socket = new ClientSocket("ws://localhost:8080");
+    console.log(socket);
     socket.connect("trigger");
 
     let left_btn = document.querySelector("#left");
