@@ -56,7 +56,7 @@ wss.on("connection", (ws) => {
         if (message.handShake) {
             message.socket = ws;
             Client.addSocket(message);
-            ws.send("Welcome Client " + message.id);
+            //ws.send("Welcome Client " + message.id);
             return
         }
         if (message.to) {

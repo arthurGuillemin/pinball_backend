@@ -17,24 +17,53 @@ function rotateBlueBox() {
 
 
 
-
+var socket;
 
 window.onload = function () {
 
 
-    var blue = document.querySelector("#blue");
+    socket = new ClientSocket();
+    socket.connect("pinball");
 
-
-    document.addEventListener("keyup", (event) => {
-        if (event.key === "ArrowUp") {
-            rotateBlueBox();
+    socket.addEventListener("MESSAGE", function (e) {
+        console.log(e);
+        if (!e.data) {
+            return;
         }
-
-        if (event.key === "ArrowDown") {
+        //const obj = JSON.parse('{"name":"John", "age":30, "city":"New York"}');
+        let response = JSON.parse(e.data);
+        console.log(response.text);
+        if (response.text == "left") {
+            rotateBlueBox();
+        } else if (response.text == "right") {
             rotateRedBox();
         }
 
-    });
+        // console.log(obj);
+
+    })
+
+
+
+
+
+
+
+
+
+
+
+
+    // document.addEventListener("keyup", (event) => {
+    //     if (event.key === "ArrowUp") {
+    //         rotateBlueBox();
+    //     }
+
+    //     if (event.key === "ArrowDown") {
+    //         rotateRedBox();
+    //     }
+
+    // });
 
 
 }
