@@ -1,5 +1,7 @@
 import { WebSocketServer } from 'ws';
 
+PORT = 8080;
+
 
 var Client = {
     "tab": {},
@@ -47,8 +49,9 @@ var Client = {
 
 //const WebSocket = require("ws");
 //const wss = new WebSocket.Server({ port: 8080 });
-const wss = new WebSocketServer({ port: 8080 });
-var sockets = {}
+
+const wss = new WebSocketServer({ port: PORT });
+
 wss.on("connection", (ws) => {
     ws.on("message", (msg) => {
         var message = JSON.parse(msg);
@@ -56,18 +59,17 @@ wss.on("connection", (ws) => {
         if (message.handShake) {
             message.socket = ws;
             Client.addSocket(message);
-            //ws.send("Welcome Client " + message.id);
             return
         }
         if (message.to) {
             Client.send(message);
+            return;
         }
-        ws.send(message.text);
     })
     ws.on('close', () => {
         var disconnectdClient = Client.removeBySocket(ws);
-        console.log("Deconnection depuis client ", disconnectdClient);
+        //console.log("Deconnection depuis client ", disconnectdClient);
     });
 });
 
-console.log("WebSocket Server on ws://localhost:8080");
+console.log("WebSocket Server on ws://localhost:"+PORT);

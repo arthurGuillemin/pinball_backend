@@ -5,7 +5,7 @@ let rotate_red = false;
 
 function rotateRedBox() {
     rotate_red = !rotate_red;
-    document.querySelector("#red").classList.toggle("rotated", rotate_red);
+    document.querySelector("#red").classList.toggle("redRotated", rotate_red);
 }
 
 let rotate_blue = false;
@@ -34,9 +34,9 @@ window.onload = function () {
         let response = JSON.parse(e.data);
         console.log(response.text);
         if (response.text == "left") {
-            rotateBlueBox();
-        } else if (response.text == "right") {
             rotateRedBox();
+        } else if (response.text == "right") {
+            rotateBlueBox();
         }
 
         // console.log(obj);

@@ -3,11 +3,11 @@
 
 var socket;
 let uri = "ws://locahost:8080";
-
+uri = "ws://10.92.254.238:8080";
 
 
 window.onload = function () {
-    socket = new ClientSocket("ws://localhost:8080");
+    socket = new ClientSocket(uri);
     console.log(socket);
     socket.connect("trigger");
 
