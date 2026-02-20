@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <script src="./clientSocket.js" defer></script>
+    <script src="./main.js" defer></script>
+
+    <title>Rotation interactive</title>
+    <style>
+        body {
+            background: #111;
+            color: white;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 50vh;
+            gap: 20px;
+        }
+
+        .box {
+            width: 120px;
+            height: 60px;
+            background: #ffcc00;
+            color: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            transition: transform 0.4s ease;
+        }
+
+        .rotated {
+            transform: rotate(90deg);
+        }
+
+        button {
+            padding: 10px 16px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <div id="blue" class="box">BLUE</div>
+    <br />
+    <br />
+    <p></p>
+    <p></p>
+    <br />
+    <br />
+    <div id="red" class="box">RED</div>
+
+    <button onclick="rotateBox()">Tourner</button>
+
+    <script>
+
+    </script>
+
+</body>
+
+</html>
