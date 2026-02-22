@@ -1,6 +1,6 @@
 import { WebSocketServer } from 'ws';
 
-PORT = 8080;
+const PORT = 8080;
 
 
 var Client = {
@@ -72,4 +72,4 @@ wss.on("connection", (ws) => {
     });
 });
 
-console.log("WebSocket Server on ws://localhost:"+PORT);
+console.log("WebSocket Server on ws://localhost:" + PORT);
