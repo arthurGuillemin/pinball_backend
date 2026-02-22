@@ -30,7 +30,6 @@ window.onload = function () {
         if (!e.data) {
             return;
         }
-        //const obj = JSON.parse('{"name":"John", "age":30, "city":"New York"}');
         let response = JSON.parse(e.data);
         console.log(response.text);
         if (response.text == "left") {
@@ -38,18 +37,7 @@ window.onload = function () {
         } else if (response.text == "right") {
             rotateBlueBox();
         }
-
-        // console.log(obj);
-
     })
-
-
-
-
-
-
-
-
 
 
 
@@ -58,11 +46,9 @@ window.onload = function () {
     //     if (event.key === "ArrowUp") {
     //         rotateBlueBox();
     //     }
-
     //     if (event.key === "ArrowDown") {
     //         rotateRedBox();
     //     }
-
     // });
 
 

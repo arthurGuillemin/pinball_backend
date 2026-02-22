@@ -1,42 +1,51 @@
 import { WebSocketServer } from 'ws';
+import debug from "./debug.mjs";
 
 const PORT = 8080;
 
 
 var Client = {
-    "tab": {},
+    "table": {},
     addSocket: function (obj) {
-        console.log("Client Connected id", obj.id);
-        if (!this.tab[obj.id]) {
-            this.tab[obj.id] = [];
+        if (!obj.from) {
+            return false;
         }
-        if (this.tab[obj.id].includes(obj.socket)) {
+        let socketId = obj.from.trim().toLowerCase();
+        if (!this.table[socketId]) {
+            this.table[socketId] = [];
+        }
+        if (this.table[socketId].includes(obj.socket)) {
             console.log("socket exist deja ");
         } else {
-            this.tab[obj.id].push(obj.socket);
+            this.table[socketId].push(obj.socket);
         }
-        //debug.log(this.tab);
+        debug.log(this.table);
     },
-    removeBySocket: function (socket) {
-        var idClient;
-        for (var key in this.tab) {
-            var tab = this.tab[key];
-            const index = this.tab[key].indexOf(socket);
+    findBySocket: function (socket) {
+        let result = {};
+        for (var key in this.table) {
+            let table = this.table[key];
+            const index = this.table[key].indexOf(socket);
             if (index > -1) { // only splice array when item is found
-                idClient = key;
-                this.tab[key].splice(index, 1); // 2nd parameter means remove one item only
+                result.idClient = key;
+                result.index = index;
+                return result;
             }
         }
-        console.log("Disconnect id " + idClient);
-        if (this.tab[idClient] && !this.tab[idClient].length) {
-            delete this.tab[idClient];
+        return false;
+    },
+    removeBySocket: function (socket) {
+        let loc = this.findBySocket(socket);
+        this.table[loc.idClient].splice(loc.index, 1);
+        if (this.table[loc.idClient] && !this.table[loc.idClient].length) {
+            delete this.table[loc.idClient];
         }
-        //debug.log(this.tab);
-        return idClient;
+        debug.log(this.table);
+        return loc.idClient;
     },
     send(message) {
-        let to = message.to;
-        let socketList = this.tab[to];
+        let to = message.to.trim().toLowerCase();
+        let socketList = this.table[to];
         if (!socketList) {
             return false;
         }
@@ -47,19 +56,16 @@ var Client = {
 }
 
 
-//const WebSocket = require("ws");
-//const wss = new WebSocket.Server({ port: 8080 });
-
 const wss = new WebSocketServer({ port: PORT });
 
 wss.on("connection", (ws) => {
     ws.on("message", (msg) => {
-        var message = JSON.parse(msg);
+        let message = JSON.parse(msg);
         console.log(message);
         if (message.handShake) {
             message.socket = ws;
             Client.addSocket(message);
-            return
+            return;
         }
         if (message.to) {
             Client.send(message);
@@ -68,8 +74,8 @@ wss.on("connection", (ws) => {
     })
     ws.on('close', () => {
         var disconnectdClient = Client.removeBySocket(ws);
-        //console.log("Deconnection depuis client ", disconnectdClient);
+        console.log("Client Disconnected ", disconnectdClient);
     });
 });
 
-console.log("WebSocket Server on ws://localhost:" + PORT);
+console.log("WebSocket Server Listen on ws://localhost:" + PORT);

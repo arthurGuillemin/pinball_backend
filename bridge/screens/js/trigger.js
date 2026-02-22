@@ -2,8 +2,8 @@
 
 
 var socket;
-let uri = "ws://locahost:8080";
-uri = "ws://10.92.254.238:8080";
+var uri = "ws://localhost:8080";
+// uri = "ws://10.92.254.238:8080";
 
 
 window.onload = function () {

@@ -34,11 +34,11 @@ function Dispatcher(obj) {
 
 
 class ClientSocket {
-    uri = "ws://localhost:8080";
     webSocket = false;
     timeoutDelay;
-    id = 1;
+    id = "";
     autoConnect = true;
+    uri = "ws://localhost:8080";
 
     compteur_dev = 0;
 
@@ -48,14 +48,13 @@ class ClientSocket {
             this.uri = uri;
         }
         if (id) {
-            this.id = (id);
+            this.id = id;
         }
     }
     connect(id) {
         if (id) {
-            this.id = (id);
+            this.id = id;
         }
-
         if (this.webSocket && this.webSocket.readyState <= 1) {
             return false;
         }
@@ -67,7 +66,6 @@ class ClientSocket {
         console.log("try To Connect N°", ++this.compteur_dev);
     }
     tryToConnectAgain() {
-        console.log(this.autoConnect);
         if (!this.autoConnect) {
             return false;
         }
@@ -102,11 +100,11 @@ class ClientSocket {
             console.log("Connected...");
             clearTimeout(this.timeoutDelay);
             var handShake = {
-                "id": this.id,
+                "from": this.id,
                 "handShake": true
             }
             this.webSocket.send(JSON.stringify(handShake));
-            this.dispatchEvent("OPEN", "");
+            this.dispatchEvent("OPEN");
         };
         this.webSocket.onclose = (arg) => {
             clearTimeout(this.timeoutDelay);
