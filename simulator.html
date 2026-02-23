@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head><title>ESP32 Simulator</title></head>
+<body>
+  <h2>Simulateur ESP32</h2>
+<button 
+  onmousedown="send('LEFT_FLIPPER_DOWN')" 
+  onmouseup="send('LEFT_FLIPPER_UP')">
+  ⬅ Flipper Gauche
+</button>
+<button 
+  onmousedown="send('RIGHT_FLIPPER_DOWN')" 
+  onmouseup="send('RIGHT_FLIPPER_UP')">
+  Flipper Droit ➡
+</button>
+  <button onclick="send('START')">Start</button>
+  <button onclick="send('TILT')">Tilt</button>
+
+  <ul id="log"></ul>
+
+  <script>
+    const ws = new WebSocket('ws://localhost:3000/esp32');
+
+    ws.onmessage = (e) => {
+      const li = document.createElement('li');
+      li.textContent = '← reçu: ' + e.data;
+      document.getElementById('log').prepend(li);
+    };
+
+    function send(event) {
+      const payload = JSON.stringify({ type: 'BUTTON', event });
+      ws.send(payload);
+      const li = document.createElement('li');
+      li.textContent = '→ envoyé: ' + payload;
+      document.getElementById('log').prepend(li);
+    }
+  </script>
+</body>
+</html>
