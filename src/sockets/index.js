@@ -9,7 +9,7 @@ export function setupWebSockets(httpServer) {
       esp32Wss.handleUpgrade(request, socket, head, (ws) => {
         esp32Wss.emit("connection", ws, request);
       });
-    } else if (pathname === "/backglass") {
+    } else if (pathname === "/screens") {
       backglassWss.handleUpgrade(request, socket, head, (ws) => {
         backglassWss.emit("connection", ws, request);
       });

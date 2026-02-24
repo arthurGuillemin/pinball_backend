@@ -11,7 +11,7 @@ const broadcast = (data) => {
   });
 };
 
-screensWss.on("connecton", (ws) => {
+screensWss.on("connection", (ws) => {
   console.log("debug : co sur le /screensq");
 
   ws.send(JSON.stringify({ type: "state_update", state: getState() }));
