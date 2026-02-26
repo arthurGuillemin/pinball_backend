@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <script src="./js/clientSocket.js" defer></script>
-    <script src="./js/screen.js" defer></script>
+    <script src="./js/game.js" defer></script>
 
     <title>Rotation interactive</title>
     <style>
@@ -29,15 +29,17 @@
             align-items: center;
             justify-content: center;
             font-weight: bold;
-            transition: transform 0.4s ease;
+            transition: transform 0.2s ease;
             transform-origin: left;
+            rotate: 37.5deg;
         }
 
-        #blue {
+        #right {
             position: relative;
             top: 40px;
             left: 380px;
             transform-origin: right;
+            rotate: -37.5deg;
         }
 
         .rotated {
@@ -59,14 +61,14 @@
 <body>
 
     <div class="container">
-        <div id="blue" class="box">
+        <div id="right" class="box">
             <p>Blue</p>
         </div>
 
 
 
 
-        <div id="red" class="box">
+        <div id="left" class="box">
             <p>RED</p>>
         </div>
     </div>
