@@ -5,37 +5,78 @@ var socket;
 var uri = "ws://localhost:8080";
 // uri = "ws://10.92.254.238:8080";
 
+function Button(direction) {
+    this.lastState = "up";
+    this.direction = direction;
+
+    this.downFunction = function () {
+        if (this.lastState == "down") {
+            return false;
+        }
+        console.log("Down " + this.direction);
+        this.lastState = "down";
+        socket.sendMessage('{"direction" : "' + this.direction + '", "type" : "down" }', "pinball");
+    }
+    this.upFunction = function () {
+        console.log("UP " + this.direction);
+        this.lastState = "up";
+        socket.sendMessage('{"direction" : "' + this.direction + '", "type" : "up" }', "pinball");
+
+    }
+}
+
 
 window.onload = function () {
     socket = new ClientSocket(uri);
-    console.log(socket);
     socket.connect("trigger");
+
+    var leftButton = new Button("left");
+    var rightButton = new Button("right");
 
     let left_btn = document.querySelector("#left");
     let right_btn = document.querySelector("#right");
 
-    left_btn.addEventListener("click", function () {
-        socket.sendMessage("left", "pinball");
 
-    })
-    right_btn.addEventListener("click", function () {
-        socket.sendMessage("right", "pinball");
 
-    })
 
-    document.addEventListener("keyup", (event) => {
+    left_btn.addEventListener("touchstart", leftButton.downFunction.bind(leftButton));
+    left_btn.addEventListener("mousedown", leftButton.downFunction.bind(leftButton));
+
+
+    left_btn.addEventListener("touchend", leftButton.upFunction.bind(leftButton));
+    left_btn.addEventListener("mouseup", leftButton.upFunction.bind(leftButton));
+
+
+
+    right_btn.addEventListener("touchstart", rightButton.downFunction.bind(rightButton));
+    right_btn.addEventListener("mousedown", rightButton.downFunction.bind(rightButton));
+
+
+    right_btn.addEventListener("touchend", rightButton.upFunction.bind(rightButton));
+    right_btn.addEventListener("mouseup", rightButton.upFunction.bind(rightButton));
+
+    document.addEventListener("keydown", (event) => {
+
         if (event.key === "ArrowLeft") {
-            console.log("left");
-            socket.sendMessage("left", "pinball");
 
+            leftButton.downFunction();
         }
 
         if (event.key === "ArrowRight") {
-            console.log("Right");
-            socket.sendMessage("right", "pinball");
+            rightButton.downFunction();
+        }
+    })
+
+    document.addEventListener("keyup", (event) => {
+
+        if (event.key === "ArrowLeft") {
+            leftButton.upFunction();
         }
 
-    });
+        if (event.key === "ArrowRight") {
+            rightButton.upFunction();
+        }
+    })
 
 
 }

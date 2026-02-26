@@ -16,7 +16,6 @@ client.on("connect", () => {
     });
 });
 
-
 client.on("message", (topic, message) => {
     const telemetry = JSON.parse(message.toString());
     console.log(telemetry);
@@ -33,6 +32,8 @@ client.on("disconnect", function (e) {
 client.on("error", function (e) {
     console.log("my error")
 })
+
+
 
 
 
