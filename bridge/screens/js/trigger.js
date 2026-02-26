@@ -3,11 +3,16 @@
 
 var socket;
 var uri = "ws://localhost:8080";
+
+
 // uri = "ws://10.92.254.238:8080";
 
 function Button(direction) {
     this.lastState = "up";
     this.direction = direction;
+
+
+
 
     this.downFunction = function () {
         if (this.lastState == "down") {
