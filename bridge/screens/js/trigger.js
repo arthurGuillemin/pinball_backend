@@ -10,10 +10,6 @@ var uri = "ws://localhost:8080";
 function Button(direction) {
     this.lastState = "up";
     this.direction = direction;
-
-
-
-
     this.downFunction = function () {
         if (this.lastState == "down") {
             return false;
