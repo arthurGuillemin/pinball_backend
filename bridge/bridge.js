@@ -4,9 +4,14 @@ import mqtt from "mqtt"; // import namespace "mqtt"
 
 
 let client = mqtt.connect("mqtt://captain.dev0.pandor.cloud:1884"); // create a client
+
+
 const topic = "classroom/Younes";
+
+
 const clientsList = [];
 const PORT = 8080;
+
 
 client.on("connect", () => {
     client.subscribe(topic, (err) => {
@@ -24,6 +29,8 @@ client.on("message", (topic, message) => {
         ws.send(JSON.stringify(telemetry));
     });
 });
+
+
 
 client.on("disconnect", function (e) {
     console.log("disconnection")
