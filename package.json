@@ -33,6 +33,7 @@
   "homepage": "https://github.com/arthurGuillemin/pinball_backend#readme",
   "dependencies": {
     "@supabase/supabase-js": "^2.96.0",
+    "cors": "^2.8.6",
     "dotenv": "^17.3.1",
     "express": "^5.2.1",
     "ws": "^8.19.0",
