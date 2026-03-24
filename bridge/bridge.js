@@ -21,6 +21,8 @@ client.on("connect", () => {
     });
 });
 
+
+
 client.on("message", (topic, message) => {
     const telemetry = JSON.parse(message.toString());
     console.log(telemetry);
@@ -29,6 +31,8 @@ client.on("message", (topic, message) => {
         ws.send(JSON.stringify(telemetry));
     });
 });
+
+
 
 
 
@@ -50,6 +54,8 @@ console.log("WebSocket Server on ws://localhost:" + PORT);
 wss.on("connection", (ws) => {
     console.log("Client Connected");
     clientsList.push(ws);
+
+
 });
 
 
