@@ -34,7 +34,18 @@ jobs:
       - name: Restart Azure Web App
         uses: azure/CLI@v1
         with:
+          azcliversion: 2.84.0
           inlineScript: |
+            # Login via service principal
+            az login --service-principal \
+              -u $AZURE_CLIENT_ID \
+              -p $AZURE_CLIENT_SECRET \
+              --tenant $AZURE_TENANT_ID
+
+            # Restart app
             az webapp restart --name flipper-backend-app --resource-group rg-flipper
         env:
-          AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
+          AZURE_CLIENT_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).clientId }}
+          AZURE_CLIENT_SECRET: ${{ fromJSON(secrets.AZURE_CREDENTIALS).clientSecret }}
+          AZURE_TENANT_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).tenantId }}
+          AZURE_SUBSCRIPTION_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).subscriptionId }}
