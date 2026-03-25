@@ -5,7 +5,7 @@ import debug from "./lib/debug.mjs";
 
 
 
-const PORT = 8181;
+const PORT = 8080;
 
 var MySocket = {
     "table": {},

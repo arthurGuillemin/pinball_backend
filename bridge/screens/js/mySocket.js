@@ -33,10 +33,10 @@ function Dispatcher(obj) {
 
 
 
-class ClientSocket {
+class MySocket {
     webSocket = false;
     timeoutDelay;
-    id = "";
+    id = 1;
     autoConnect = true;
     uri = "ws://localhost:8080";
 
@@ -78,14 +78,8 @@ class ClientSocket {
         clearTimeout(this.timeoutDelay);
         this.webSocket.close();
     }
-    sendMessage(message, to) {
-        var jsonMessage = {
-            "text": message,
-            "from": this.id
-        }
-        if (to) {
-            jsonMessage.to = to;
-        }
+    sendMessage(jsonMessage) {
+        jsonMessage.from = this.id;
         this.webSocket.send(JSON.stringify(jsonMessage));
     }
     timeoutToKillAndReconnect() {
@@ -101,7 +95,7 @@ class ClientSocket {
             clearTimeout(this.timeoutDelay);
             var handShake = {
                 "from": this.id,
-                "handShake": true
+                "type": "handshake"
             }
             this.webSocket.send(JSON.stringify(handShake));
             this.dispatchEvent("OPEN");

@@ -14,21 +14,31 @@ function Button(direction) {
         if (this.lastState == "down") {
             return false;
         }
-        console.log("Down " + this.direction);
+        // console.log("Down " + this.direction);
         this.lastState = "down";
-        socket.sendMessage('{"direction" : "' + this.direction + '", "type" : "down" }', "pinball");
+        socket.sendMessage({
+            "type": "message",
+            "direction": this.direction,
+            "event": "key_down",
+            "to": "pinball"
+        });
     }
     this.upFunction = function () {
-        console.log("UP " + this.direction);
+        // console.log("UP " + this.direction);
         this.lastState = "up";
-        socket.sendMessage('{"direction" : "' + this.direction + '", "type" : "up" }', "pinball");
+        socket.sendMessage({
+            "type": "message",
+            "direction": this.direction,
+            "event": "key_up",
+            "to": "pinball"
+        });
 
     }
 }
 
 
 window.onload = function () {
-    socket = new ClientSocket(uri);
+    socket = new MySocket(uri);
     socket.connect("trigger");
 
     var leftButton = new Button("left");
@@ -38,20 +48,14 @@ window.onload = function () {
     let right_btn = document.querySelector("#right");
 
 
-
-
     left_btn.addEventListener("touchstart", leftButton.downFunction.bind(leftButton));
     left_btn.addEventListener("mousedown", leftButton.downFunction.bind(leftButton));
-
 
     left_btn.addEventListener("touchend", leftButton.upFunction.bind(leftButton));
     left_btn.addEventListener("mouseup", leftButton.upFunction.bind(leftButton));
 
-
-
     right_btn.addEventListener("touchstart", rightButton.downFunction.bind(rightButton));
     right_btn.addEventListener("mousedown", rightButton.downFunction.bind(rightButton));
-
 
     right_btn.addEventListener("touchend", rightButton.upFunction.bind(rightButton));
     right_btn.addEventListener("mouseup", rightButton.upFunction.bind(rightButton));
@@ -59,7 +63,6 @@ window.onload = function () {
     document.addEventListener("keydown", (event) => {
 
         if (event.key === "ArrowLeft") {
-
             leftButton.downFunction();
         }
 
@@ -78,6 +81,4 @@ window.onload = function () {
             rightButton.upFunction();
         }
     })
-
-
 }

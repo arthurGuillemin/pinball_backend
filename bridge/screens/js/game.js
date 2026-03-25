@@ -1,6 +1,3 @@
-
-
-
 let rotate_red = false;
 
 function rotateRedBox() {
@@ -29,9 +26,10 @@ function unhitLeft(buttonId) {
 
 
 var socket;
+var uri = "ws://localhost:8080";
 
 window.onload = function () {
-    socket = new ClientSocket();
+    socket = new MySocket(uri);
     socket.connect("pinball");
 
     socket.addEventListener("MESSAGE", function (e) {
@@ -39,41 +37,20 @@ window.onload = function () {
             return;
         }
         let response = JSON.parse(e.data);
-        let keyInfo = JSON.parse(response.text);
-        console.log(keyInfo);
-
-        if (keyInfo.direction == "left") {
-            if (keyInfo.type == "down") {
+        // console.log(response);
+        if (response.direction == "left") {
+            if (response.event == "key_down") {
                 hitLeft();
             } else {
                 unhitLeft();
             }
         }
-        if (keyInfo.direction == "right") {
-            if (keyInfo.type == "down") {
+        if (response.direction == "right") {
+            if (response.event == "key_down") {
                 hitRight();
             } else {
                 unhitRight();
             }
         }
-
     })
-
-    // document.addEventListener("keyup", (event) => {
-    //     if (event.key === "ArrowLeft") {
-    //         unhitLeft();
-    //     }
-    //     if (event.key === "ArrowRight") {
-    //         unhitRight();
-    //     }
-    // });
-
-    // document.addEventListener("keydown", (event) => {
-    //     if (event.key === "ArrowLeft") {
-    //         hitLeft("left");
-    //     }
-    //     if (event.key === "ArrowRight") {
-    //         hitRight("blue");
-    //     }
-    // });
 }

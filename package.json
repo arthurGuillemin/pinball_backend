@@ -9,6 +9,7 @@
     "test": "vitest run",
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
+    "socket": "nodemon bridge/server/server.js",
     "prepare": "husky"
   },
   "lint-staged": {
