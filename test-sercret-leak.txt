@@ -1,1 +1,0 @@
-SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYWtlIjoidGVzdCIsInJvbGUiOiJhbm9uIn0.faussesignature123
