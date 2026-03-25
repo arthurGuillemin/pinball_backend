@@ -38,9 +38,8 @@ jobs:
 
   # build , scna deploy
   build-and-deploy:
-    needs: security-scan 
+    needs: security-scan  , test
 
-    needs: test                   
     runs-on: ubuntu-latest
     environment: production
 
