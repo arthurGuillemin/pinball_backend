@@ -1,9 +1,13 @@
+//libs
 import express from "express";
-import { createServer } from "http";
 import dotenv from "dotenv";
 import scoresRouter from "./routes/scores.route.js";
 import cors from "cors";
+
+//functions
 import { setupWebSockets } from "./sockets/index.js";
+import { createServer } from "http";
+import errorHandler from "./middlewares/errorHandler.js";
 
 dotenv.config();
 
@@ -20,6 +24,7 @@ app.use(
 );
 
 app.use(express.json());
+app.use(errorHandler);
 
 // test route
 app.get("/", (req, res) => {
