@@ -8,7 +8,7 @@ import cors from "cors";
 import { setupWebSockets } from "./sockets/index.js";
 import { createServer } from "http";
 import errorHandler from "./middlewares/errorHandler.js";
-
+import AppError from "./utils/appError.js";
 dotenv.config();
 
 const PORT = process.env.PORT || 3000;
@@ -24,7 +24,6 @@ app.use(
 );
 
 app.use(express.json());
-app.use(errorHandler);
 
 // test route
 app.get("/", (req, res) => {
@@ -41,4 +40,5 @@ httpServer.listen(PORT, () => {
   console.log(`Serveur lancé sur le port ${PORT}`);
 });
 
+app.use(errorHandler);
 export { app, httpServer };
