@@ -1,17 +1,10 @@
 import { WebSocketServer } from 'ws';
 import mqtt from "mqtt"; // import namespace "mqtt"
 
-
-
 let client = mqtt.connect("mqtt://captain.dev0.pandor.cloud:1884"); // create a client
 
 
 const topic = "classroom/Younes";
-
-
-const clientsList = [];
-const PORT = 8080;
-
 
 client.on("connect", () => {
     client.subscribe(topic, (err) => {
@@ -32,10 +25,6 @@ client.on("message", (topic, message) => {
     });
 });
 
-
-
-
-
 client.on("disconnect", function (e) {
     console.log("disconnection")
 })
@@ -43,19 +32,4 @@ client.on("disconnect", function (e) {
 client.on("error", function (e) {
     console.log("my error")
 })
-
-
-
-
-
-const wss = new WebSocketServer({ port: PORT });
-console.log("WebSocket Server on ws://localhost:" + PORT);
-
-wss.on("connection", (ws) => {
-    console.log("Client Connected");
-    clientsList.push(ws);
-
-
-});
-
 

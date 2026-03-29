@@ -29,7 +29,7 @@ var socket;
 var uri = "ws://localhost:8080";
 
 window.onload = function () {
-    socket = new MySocket(uri);
+    socket = new MySocket();
     socket.connect("pinball");
 
     socket.addEventListener("MESSAGE", function (e) {

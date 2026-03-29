@@ -1,12 +1,3 @@
-
-
-import { WebSocketServer } from 'ws';
-import debug from "./lib/debug.mjs";
-
-
-
-const PORT = 8080;
-
 var MySocket = {
     "table": {},
     addSocket: function (obj) {
@@ -19,7 +10,6 @@ var MySocket = {
         } else {
             this.table[socketId].add(obj.socket);
         }
-        debug.log(this.table);
     },
     removeBySocket: function (socket) {
         let idClient;
@@ -35,7 +25,6 @@ var MySocket = {
         if (this.table[idClient] && !this.table[idClient].length) {
             delete this.table[idClient];
         }
-        debug.log(this.table);
         return idClient;
     },
     sendTo(message) {
@@ -50,30 +39,4 @@ var MySocket = {
     }
 }
 
-
-
-const wss = new WebSocketServer({ port: PORT });
-
-wss.on("connection", (wsocket) => {
-
-    wsocket.on("message", (msg) => {
-        let message = JSON.parse(msg);
-        console.log(message);
-        switch (message.type) {
-            case "handshake":
-                message.socket = wsocket;
-                MySocket.addSocket(message);
-                break;
-            case "message": {
-                MySocket.sendTo(message);
-                break;
-            }
-        }
-    })
-    wsocket.on('close', () => {
-        var disconnectedClient = MySocket.removeBySocket(wsocket);
-    });
-});
-
-console.log("WebSocket Server Listen on ws://localhost:" + PORT);
-
+export default MySocket;

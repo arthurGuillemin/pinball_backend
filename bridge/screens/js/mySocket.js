@@ -39,6 +39,7 @@ class MySocket {
     id = 1;
     autoConnect = true;
     uri = "ws://localhost:8080";
+    // uri = "ws://batna.freemyip.com:8080";
 
     compteur_dev = 0;
 

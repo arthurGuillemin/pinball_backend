@@ -8,7 +8,7 @@
     "test": "vitest run",
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
-    "socket": "nodemon bridge/server/server.js",
+    "socket": "nodemon bridge/websocket.js",
     "prepare": "husky"
   },
   "lint-staged": {
