@@ -4,24 +4,30 @@
 var socket;
 var uri = "ws://localhost:8080";
 
-class millis {
-
-    constructor() {
-
+class Millis {
+    t0 = 0;
+    name = "";
+    constructor(name) {
+        this.name = name;
     }
-    begin() {
-
+    start() {
+        this.t0 = Date.now();
     }
-
-
+    end() {
+        let diff = (Date.now() - this.t0);
+        return diff;
+    }
 }
 
 class Button {
     lastState = "up";
     name = "";
+    millis = null;
+
 
     constructor(name) {
         this.name = name;
+        this.millis = new Millis(name);
     }
     htmlSelector(cssSelector) {
         this.html = document.querySelector(cssSelector);
@@ -68,17 +74,23 @@ class Launcher extends Button {
         super(name);
     }
     downFunction() {
-        if (this.lastState == "down") {
-            return false;
-        }
-        console.log("Down " + this.name);
-        this.lastState = "down";
-
+        this.strengh = 0;
+        super.downFunction();
+        this.millis.start();
     }
     upFunction() {
-        console.log("UP " + this.name);
-        this.lastState = "up";
+        this.strengh = this.millis.end();
+        super.upFunction();
 
+    }
+    communicationToServer() {
+        socket.sendMessage({
+            "type": "message",
+            "direction": this.name,
+            "event": this.lastState,
+            "to": "pinball",
+            "strengh": this.strengh
+        });
     }
 }
 
@@ -94,13 +106,5 @@ window.onload = function () {
     leftButton.htmlSelector("#left");
     rightButton.htmlSelector("#right");
     luncher.htmlSelector("#luncher");
-
-
-
-
-
-
-
-
 
 }
