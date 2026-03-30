@@ -1,7 +1,9 @@
 import dotenv from "dotenv";
 import { z } from "zod";
 import logger from "../utils/logger.js";
-dotenv.config();
+import AppError from "../utils/appError.js";
+
+dotenv.config({ path: process.env.NODE_ENV === "test" ? ".env.test" : ".env" });
 
 const envSchema = z.object({
   NODE_ENV: z
@@ -16,15 +18,17 @@ const envSchema = z.object({
 const _env = envSchema.safeParse(process.env);
 
 if (!_env.success) {
-  logger.error({ err: _env.error }, "invalid env variabkes");
-  process.exit(1);
+  logger.error({ err: _env.error.format() }, "invalid env variables");
+  if (process.env.NODE_ENV !== "test") {
+    process.exit(1);
+  } else {
+    throw new AppError("Invalid env variables");
+  }
 }
 
 const env = {
   ..._env.data,
-  ALLOWED_ORIGINS: _env.data.ALLOWED_ORIGINS.split(",").map((origin) =>
-    origin.trim(),
-  ),
+  ALLOWED_ORIGINS: _env.data.ALLOWED_ORIGINS.split(",").map((o) => o.trim()),
 };
 
 export default env;
