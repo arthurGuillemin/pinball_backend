@@ -1,6 +1,6 @@
 import { WebSocketServer } from "ws";
 import { getState, startGame, registerHit, losesBall } from "../game/state.js";
-
+import logger from "../utils/logger.js";
 const screensWss = new WebSocketServer({ noServer: true });
 
 const broadcast = (data) => {
@@ -12,7 +12,7 @@ const broadcast = (data) => {
 };
 
 screensWss.on("connection", (ws) => {
-  console.log("debug : co sur le /screensq");
+  logger.info("debug : co sur le /screensq");
 
   ws.send(JSON.stringify({ type: "state_update", state: getState() }));
 
@@ -35,7 +35,7 @@ screensWss.on("connection", (ws) => {
     }
   });
 
-  ws.on("close", () => console.log("deco de /screeen"));
+  ws.on("close", () => logger.info("deco de /screeen"));
 });
 
 export default screensWss;
