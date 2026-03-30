@@ -10,6 +10,7 @@ import { createServer } from "http";
 import errorHandler from "./middlewares/errorHandler.js";
 import AppError from "./utils/appError.js";
 import logger from "./utils/logger.js";
+import helmetMiddleware from "./middlewares/helmet.js";
 dotenv.config();
 
 const PORT = process.env.PORT || 3000;
@@ -25,6 +26,7 @@ app.use(
 );
 
 app.use(express.json());
+app.use(helmetMiddleware);
 app.use(pinoHttp({ logger, redact: ["req.headers.authorization"] }));
 
 // test route
