@@ -29,12 +29,15 @@ if (isDev) {
 
   const client = appInsights.defaultClient;
 
-  logger = pino({
-    level: "info",
-    transport: {
-      target: "pino/transport",
-      options: {
-        write: (chunk) => {
+  logger = pino(
+    {
+      level: "info",
+      base: undefined,
+      timestamp: pino.stdTimeFunctions.isoTime,
+    },
+    pino.destination({
+      write: (chunk) => {
+        try {
           const log = JSON.parse(chunk);
           const severityMap = {
             10: appInsights.Contracts.SeverityLevel.Verbose,
@@ -50,10 +53,15 @@ if (isDev) {
               appInsights.Contracts.SeverityLevel.Information,
             properties: log,
           });
-        },
+        } catch (err) {
+          client.trackTrace({
+            message: chunk,
+            severity: appInsights.Contracts.SeverityLevel.Information,
+          });
+        }
       },
-    },
-  });
+    }),
+  );
 }
 
 export default logger;
