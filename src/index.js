@@ -1,25 +1,31 @@
+//libs
 import express from "express";
-import { createServer } from "http";
-import dotenv from "dotenv";
 import scoresRouter from "./routes/scores.route.js";
 import cors from "cors";
+import pinoHttp from "pino-http";
+//functions
 import { setupWebSockets } from "./sockets/index.js";
-
-dotenv.config();
-
-const PORT = process.env.PORT || 3000;
+import { createServer } from "http";
+import errorHandler from "./middlewares/errorHandler.js";
+import AppError from "./utils/appError.js";
+import logger from "./utils/logger.js";
+import helmetMiddleware from "./middlewares/helmet.js";
+import env from "./config/env.js";
+const PORT = env.PORT;
 const app = express();
 const httpServer = createServer(app);
 
 // cors
-const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",") || [];
+const allowedOrigins = env.ALLOWED_ORIGINS;
 app.use(
   cors({
-    origin: process.env.NODE_ENV === "production" ? allowedOrigins : "*",
+    origin: env.NODE_ENV === "production" ? allowedOrigins : "*",
   }),
 );
 
 app.use(express.json());
+app.use(helmetMiddleware);
+app.use(pinoHttp({ logger, redact: ["req.headers.authorization"] }));
 
 // test route
 app.get("/", (req, res) => {
@@ -33,7 +39,8 @@ app.use("/api/scores", scoresRouter);
 setupWebSockets(httpServer);
 
 httpServer.listen(PORT, () => {
-  console.log(`Serveur lancé sur le port ${PORT}`);
+  logger.info(`Serveur lancé sur le port ${PORT}`);
 });
 
+app.use(errorHandler);
 export { app, httpServer };
