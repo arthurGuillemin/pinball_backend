@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 import { z } from "zod";
-
+import logger from "../utils/logger.js";
 dotenv.config();
 
 const envSchema = z.object({
@@ -16,7 +16,7 @@ const envSchema = z.object({
 const _env = envSchema.safeParse(process.env);
 
 if (!_env.success) {
-  console.error("wrong env variable :", _env.error());
+  logger.error({ err: _env.error }, "invalid env variabkes");
   process.exit(1);
 }
 
