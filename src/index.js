@@ -1,6 +1,5 @@
 //libs
 import express from "express";
-import dotenv from "dotenv";
 import scoresRouter from "./routes/scores.route.js";
 import cors from "cors";
 import pinoHttp from "pino-http";
@@ -11,17 +10,16 @@ import errorHandler from "./middlewares/errorHandler.js";
 import AppError from "./utils/appError.js";
 import logger from "./utils/logger.js";
 import helmetMiddleware from "./middlewares/helmet.js";
-dotenv.config();
-
-const PORT = process.env.PORT || 3000;
+import env from "./config/env.js";
+const PORT = env.PORT;
 const app = express();
 const httpServer = createServer(app);
 
 // cors
-const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",") || [];
+const allowedOrigins = env.ALLOWED_ORIGINS;
 app.use(
   cors({
-    origin: process.env.NODE_ENV === "production" ? allowedOrigins : "*",
+    origin: env.NODE_ENV === "production" ? allowedOrigins : "*",
   }),
 );
 

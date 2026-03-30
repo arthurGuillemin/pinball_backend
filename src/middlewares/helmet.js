@@ -1,6 +1,6 @@
 import helmet from "helmet";
-
-const isProd = process.env.NODE_ENV === "production";
+import env from "../config/env.js";
+const isProd = env.NODE_ENV === "production";
 
 const helmetMiddleware = helmet({
   contentSecurityPolicy: false, // a n'activer que pour des backends qui servent du html
