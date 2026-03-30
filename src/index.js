@@ -3,12 +3,13 @@ import express from "express";
 import dotenv from "dotenv";
 import scoresRouter from "./routes/scores.route.js";
 import cors from "cors";
-
+import pinoHttp from "pino-http";
 //functions
 import { setupWebSockets } from "./sockets/index.js";
 import { createServer } from "http";
 import errorHandler from "./middlewares/errorHandler.js";
 import AppError from "./utils/appError.js";
+import logger from "./utils/logger.js";
 dotenv.config();
 
 const PORT = process.env.PORT || 3000;
@@ -24,6 +25,7 @@ app.use(
 );
 
 app.use(express.json());
+app.use(pinoHttp({ logger, redact: ["req.headers.authorization"] }));
 
 // test route
 app.get("/", (req, res) => {
@@ -37,7 +39,7 @@ app.use("/api/scores", scoresRouter);
 setupWebSockets(httpServer);
 
 httpServer.listen(PORT, () => {
-  console.log(`Serveur lancé sur le port ${PORT}`);
+  logger.info(`Serveur lancé sur le port ${PORT}`);
 });
 
 app.use(errorHandler);
