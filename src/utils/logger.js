@@ -2,7 +2,6 @@ import pino from "pino";
 import appInsights from "applicationinsights";
 
 const isDev = process.env.NODE_ENV !== "production";
-
 let logger;
 
 if (isDev) {
@@ -17,7 +16,7 @@ if (isDev) {
       },
     },
   });
-} else {
+} else if (process.env.APPINSIGHTS_INSTRUMENTATIONKEY) {
   appInsights
     .setup(process.env.APPINSIGHTS_INSTRUMENTATIONKEY)
     .setAutoCollectRequests(true)
@@ -35,25 +34,25 @@ if (isDev) {
   });
 
   const originalInfo = logger.info.bind(logger);
-  const originalError = logger.error.bind(logger);
   const originalWarn = logger.warn.bind(logger);
+  const originalError = logger.error.bind(logger);
 
   logger.info = (...args) => {
-    client.trackTrace({ message: args[0], severity: 1 });
+    client?.trackTrace({ message: args[0], severity: 1 });
     originalInfo(...args);
   };
-
   logger.warn = (...args) => {
-    client.trackTrace({ message: args[0], severity: 2 });
+    client?.trackTrace({ message: args[0], severity: 2 });
     originalWarn(...args);
   };
-
   logger.error = (...args) => {
-    client.trackException({
+    client?.trackException({
       exception: args[0] instanceof Error ? args[0] : new Error(args[0]),
     });
     originalError(...args);
   };
+} else {
+  logger = pino({ level: "info" });
 }
 
 export default logger;
