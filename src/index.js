@@ -38,6 +38,7 @@ app.use("/api/scores", scoresRouter);
 // WebSockets
 setupWebSockets(httpServer);
 
+logger.info("logger init et pret");
 httpServer.listen(PORT, () => {
   logger.info(`Serveur lancé sur le port ${PORT}`);
 });
