@@ -1,0 +1,134 @@
+name: CD
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  
+
+      - name: GitGuardian scan
+        uses: GitGuardian/ggshield-action@v1
+        env:
+          GITGUARDIAN_API_KEY: ${{ secrets.GITGUARDIAN_API_KEY }}
+
+  test:
+    needs: security-scan 
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Setup test env
+        run: cp .env.test .env 
+
+      - name: Run tests
+        run: npm test
+
+  release:
+    needs: test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+    outputs:
+      new_release_published: ${{ steps.semantic.outputs.new_release_published }}
+      new_release_version: ${{ steps.semantic.outputs.new_release_version }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run semantic-release
+        id: semantic
+        run: npx semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Debug release
+        run: |
+          echo "released: ${{ needs.release.outputs.new_release_published }}"
+          echo "version: ${{ needs.release.outputs.new_release_version }}"
+
+
+  build-and-deploy:
+    concurrency:
+      group: deploy-main
+      cancel-in-progress: true
+
+    needs: release
+    if: needs.release.outputs.new_release_published == 'true'
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main  
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and Push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            arthurguill/pinball-backend:latest
+            arthurguill/pinball-backend:v${{ needs.release.outputs.new_release_version }}
+            arthurguill/pinball-backend:${{ github.sha }}
+          cache-from: type=registry,ref=arthurguill/pinball-backend:latest
+          cache-to: type=inline
+
+      - name: Scan image with Trivy
+        uses: aquasecurity/trivy-action@0.35.0
+        with:
+          image-ref: arthurguill/pinball-backend:v${{ needs.release.outputs.new_release_version }}
+          severity: HIGH,CRITICAL
+          exit-code: '1'  
+          format: sarif
+          output: trivy-results.sarif
+
+      - name: Upload Trivy results to GitHub Security
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: trivy-results.sarif
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: flipper-backend-app
+          images: arthurguill/pinball-backend:v${{ needs.release.outputs.new_release_version }}
