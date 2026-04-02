@@ -113,6 +113,18 @@ jobs:
           cache-from: type=registry,ref=arthurguill/pinball-backend:latest
           cache-to: type=inline
 
+      - name: Create GitHub release
+        if: success()
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+        with:
+          tag_name: v${{  needs.release.outputs.new_release_version  }}
+          release_name: Release v${{  needs.release.outputs.new_release_version }}
+          draft: false
+          prerelease: false
+        
+
       - name: Scan image with Trivy
         uses: aquasecurity/trivy-action@0.35.0
         with:
