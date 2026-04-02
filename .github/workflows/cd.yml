@@ -65,7 +65,7 @@ jobs:
         id: semantic
         run: npx semantic-release
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
       - name: Debug release
         run: |
           echo "released: ${{ needs.release.outputs.new_release_published }}"
