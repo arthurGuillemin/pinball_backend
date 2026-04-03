@@ -1,3 +1,10 @@
+## [1.1.2](https://github.com/arthurGuillemin/pinball_backend/compare/v1.1.1...v1.1.2) (2026-04-03)
+
+
+### Bug Fixes
+
+* **ci:** change branche ref to main ([e2da095](https://github.com/arthurGuillemin/pinball_backend/commit/e2da0952d520b5068209e14296723bd87a64d2a6))
+
 ## [1.1.1](https://github.com/arthurGuillemin/pinball_backend/compare/v1.1.0...v1.1.1) (2026-04-03)
 
 
