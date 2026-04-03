@@ -152,7 +152,7 @@ jobs:
         uses: azure/webapps-deploy@v3
         with:
           app-name: flipper-backend-app
-          images: arthurguill/pinball-backend:v${{ needs.release.outputs.new_release_version }}
+          images: arthurguill/pinball-backend:latest
 
   notifyTeam7:
     needs: [release, deploy]
