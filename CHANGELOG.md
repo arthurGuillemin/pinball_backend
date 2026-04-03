@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/arthurGuillemin/pinball_backend/compare/v1.1.0...v1.1.1) (2026-04-03)
+
+
+### Bug Fixes
+
+* **ci:** condition to upload trivy result scan ([815a3b4](https://github.com/arthurGuillemin/pinball_backend/commit/815a3b40609eac5a77c802dcb20006aeabe3c634))
+
 # [1.1.0](https://github.com/arthurGuillemin/pinball_backend/compare/v1.0.0...v1.1.0) (2026-04-03)
 
 
