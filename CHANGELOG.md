@@ -1,3 +1,16 @@
+# [1.1.0](https://github.com/arthurGuillemin/pinball_backend/compare/v1.0.0...v1.1.0) (2026-04-03)
+
+
+### Bug Fixes
+
+* **ci:** hide discord webhook link in gh secret ([af48015](https://github.com/arthurGuillemin/pinball_backend/commit/af4801586778ff0764f98b6b437d52d676a35a2d))
+* **ci:** improve CI pipeline for tests and build ([985fbb0](https://github.com/arthurGuillemin/pinball_backend/commit/985fbb0e62403c2c2af455ba19a19d63fdc3dee5))
+
+
+### Features
+
+* **changelog:** update changelog ([e0676b0](https://github.com/arthurGuillemin/pinball_backend/commit/e0676b08d2eb112e8aaef236c859e1887effe938))
+
 # 1.0.0 (2026-04-02)
 
 
