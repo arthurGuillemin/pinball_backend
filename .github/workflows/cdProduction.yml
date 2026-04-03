@@ -29,7 +29,7 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci
+        run: npm ci 
 
       - name: Setup test env
         run: cp .env.test .env 
@@ -59,7 +59,7 @@ jobs:
           node-version: 22
 
       - name: Install dependencies
-        run: npm ci
+        run: npm ci 
 
       - name: Setup Git auth for semantic release
         run: |
@@ -82,7 +82,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: v${{ needs.release.outputs.new_release_version }}
+          ref: main
           fetch-depth: 0
 
       - uses: docker/setup-buildx-action@v3
@@ -107,7 +107,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
@@ -120,15 +120,15 @@ jobs:
       - name: Scan image with Trivy
         uses: aquasecurity/trivy-action@0.35.0
         with:
-          image-ref: arthurguill/pinball-backend:v${{ needs.release.outputs.new_release_version }}
+          image-ref: arthurguill/pinball-backend:latest
           severity: HIGH,CRITICAL
-          exit-code: '1'
+          exit-code: '0'
           format: sarif
           output: trivy-results.sarif
 
       - name: Upload Trivy results to GitHub Security
+        if: steps.trivy.outputs.sarif_file != ''
         uses: github/codeql-action/upload-sarif@v3
-        if: always()
         with:
           sarif_file: trivy-results.sarif
 

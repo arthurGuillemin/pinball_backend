@@ -1,3 +1,54 @@
+## [1.1.5](https://github.com/arthurGuillemin/pinball_backend/compare/v1.1.4...v1.1.5) (2026-04-03)
+
+
+### Bug Fixes
+
+* **ci:** changetrivy exit code to 0 ([eb86f7d](https://github.com/arthurGuillemin/pinball_backend/commit/eb86f7d8b9786a93dea4fd4fbc95f048ab65183e))
+
+## [1.1.4](https://github.com/arthurGuillemin/pinball_backend/compare/v1.1.3...v1.1.4) (2026-04-03)
+
+
+### Bug Fixes
+
+* **ci:** rempove wrong node version syntax ([f86edd8](https://github.com/arthurGuillemin/pinball_backend/commit/f86edd826a7b20ed5e7208b86829a3fe7e2f40ff))
+* **ci:** tag latest to docker image and syntax correction node version in yml ([de0035f](https://github.com/arthurGuillemin/pinball_backend/commit/de0035fdb607007bab3c8e74a56af2da218924b6))
+
+## [1.1.3](https://github.com/arthurGuillemin/pinball_backend/compare/v1.1.2...v1.1.3) (2026-04-03)
+
+
+### Bug Fixes
+
+* **ci:** change node version in dockerfile , remove arm build and add omit=dev to npm ci jobs ([d4b311e](https://github.com/arthurGuillemin/pinball_backend/commit/d4b311e9311c8355ec726042a9415008bddf1e5c))
+* **ci:** rempove wrong omit dev ([03f99f6](https://github.com/arthurGuillemin/pinball_backend/commit/03f99f636f35ae25d703ba6dfe467e1519c125ba))
+* **ci:** rempove wrong omit dev ([437113a](https://github.com/arthurGuillemin/pinball_backend/commit/437113a93ece1c57a3ccbdcfbc95cd51da7a2235))
+
+## [1.1.2](https://github.com/arthurGuillemin/pinball_backend/compare/v1.1.1...v1.1.2) (2026-04-03)
+
+
+### Bug Fixes
+
+* **ci:** change branche ref to main ([e2da095](https://github.com/arthurGuillemin/pinball_backend/commit/e2da0952d520b5068209e14296723bd87a64d2a6))
+
+## [1.1.1](https://github.com/arthurGuillemin/pinball_backend/compare/v1.1.0...v1.1.1) (2026-04-03)
+
+
+### Bug Fixes
+
+* **ci:** condition to upload trivy result scan ([815a3b4](https://github.com/arthurGuillemin/pinball_backend/commit/815a3b40609eac5a77c802dcb20006aeabe3c634))
+
+# [1.1.0](https://github.com/arthurGuillemin/pinball_backend/compare/v1.0.0...v1.1.0) (2026-04-03)
+
+
+### Bug Fixes
+
+* **ci:** hide discord webhook link in gh secret ([af48015](https://github.com/arthurGuillemin/pinball_backend/commit/af4801586778ff0764f98b6b437d52d676a35a2d))
+* **ci:** improve CI pipeline for tests and build ([985fbb0](https://github.com/arthurGuillemin/pinball_backend/commit/985fbb0e62403c2c2af455ba19a19d63fdc3dee5))
+
+
+### Features
+
+* **changelog:** update changelog ([e0676b0](https://github.com/arthurGuillemin/pinball_backend/commit/e0676b08d2eb112e8aaef236c859e1887effe938))
+
 # 1.0.0 (2026-04-02)
 
 
@@ -5,10 +56,10 @@
 
 * **api:** improve error handling and validation flow ([ca6d754](https://github.com/arthurGuillemin/pinball_backend/commit/ca6d754c9c616e9ae59579cc2d809cfe35640adf))
 * **cd,ci:** update node version to a more recent one ([71e6c15](https://github.com/arthurGuillemin/pinball_backend/commit/71e6c1567a2d138b90bb54cde6c17720ddedd8a3))
-* **ci:** add missing dependencies for auto release ([638e4df](https://github.com/arthurGuillemin/pinball_backend/commit/638e4dfc6e178a28a9a45bb5bcec5f56550c1870))
+
 * **ci:** add missing dependencies for auto release ([9c5bceb](https://github.com/arthurGuillemin/pinball_backend/commit/9c5bceb86f53f4305719113c0af8692a3f6a3f00))
 * **ci:** change github token name ([d8800e2](https://github.com/arthurGuillemin/pinball_backend/commit/d8800e2c866065de1718ecc829041dcdbcf1c061))
-* **ci:** change github token name ([5788a6f](https://github.com/arthurGuillemin/pinball_backend/commit/5788a6f3945e9c1afc766bc35cabdc7626eeb4f0))
+
 
 
 ### Features
