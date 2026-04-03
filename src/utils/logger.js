@@ -1,3 +1,4 @@
+// src/utils/logger.js
 import pino from "pino";
 import appInsights from "applicationinsights";
 
@@ -17,8 +18,7 @@ if (isDev) {
       },
     },
   });
-} else {
-  // en prod: app insight
+} else if (process.env.APPINSIGHTS_INSTRUMENTATIONKEY) {
   appInsights
     .setup(process.env.APPINSIGHTS_INSTRUMENTATIONKEY)
     .setAutoCollectRequests(true)
@@ -29,30 +29,42 @@ if (isDev) {
 
   const client = appInsights.defaultClient;
 
+  const fallbackLog = (...args) => console.log(...args);
+
   logger = pino({
     level: "info",
-    transport: {
-      target: "pino/transport",
-      options: {
-        write: (chunk) => {
-          const log = JSON.parse(chunk);
-          const severityMap = {
-            10: appInsights.Contracts.SeverityLevel.Verbose,
-            20: appInsights.Contracts.SeverityLevel.Information,
-            30: appInsights.Contracts.SeverityLevel.Warning,
-            40: appInsights.Contracts.SeverityLevel.Error,
-            50: appInsights.Contracts.SeverityLevel.Critical,
-          };
-          client.trackTrace({
-            message: log.msg,
-            severity:
-              severityMap[log.level] ||
-              appInsights.Contracts.SeverityLevel.Information,
-            properties: log,
-          });
-        },
-      },
-    },
+    base: undefined,
+    timestamp: pino.stdTimeFunctions.isoTime,
+  });
+
+  const trackSafe = (fn, severity, args) => {
+    if (client?._logApi) {
+      fn({
+        message: args[0],
+        severity,
+        properties: args[1] || {},
+      });
+    } else {
+      fallbackLog(...args);
+    }
+  };
+
+  logger.info = (...args) => trackSafe(client.trackTrace.bind(client), 1, args);
+  logger.warn = (...args) => trackSafe(client.trackTrace.bind(client), 2, args);
+  logger.error = (...args) => {
+    if (client?._logApi) {
+      client.trackException({
+        exception: args[0] instanceof Error ? args[0] : new Error(args[0]),
+      });
+    } else {
+      fallbackLog(...args);
+    }
+  };
+} else {
+  logger = pino({
+    level: "info",
+    base: undefined,
+    timestamp: pino.stdTimeFunctions.isoTime,
   });
 }
 
