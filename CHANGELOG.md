@@ -1,3 +1,10 @@
+## [1.1.5](https://github.com/arthurGuillemin/pinball_backend/compare/v1.1.4...v1.1.5) (2026-04-03)
+
+
+### Bug Fixes
+
+* **ci:** changetrivy exit code to 0 ([eb86f7d](https://github.com/arthurGuillemin/pinball_backend/commit/eb86f7d8b9786a93dea4fd4fbc95f048ab65183e))
+
 ## [1.1.4](https://github.com/arthurGuillemin/pinball_backend/compare/v1.1.3...v1.1.4) (2026-04-03)
 
 
