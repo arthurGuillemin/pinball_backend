@@ -1,3 +1,12 @@
+## [1.1.3](https://github.com/arthurGuillemin/pinball_backend/compare/v1.1.2...v1.1.3) (2026-04-03)
+
+
+### Bug Fixes
+
+* **ci:** change node version in dockerfile , remove arm build and add omit=dev to npm ci jobs ([d4b311e](https://github.com/arthurGuillemin/pinball_backend/commit/d4b311e9311c8355ec726042a9415008bddf1e5c))
+* **ci:** rempove wrong omit dev ([03f99f6](https://github.com/arthurGuillemin/pinball_backend/commit/03f99f636f35ae25d703ba6dfe467e1519c125ba))
+* **ci:** rempove wrong omit dev ([437113a](https://github.com/arthurGuillemin/pinball_backend/commit/437113a93ece1c57a3ccbdcfbc95cd51da7a2235))
+
 ## [1.1.2](https://github.com/arthurGuillemin/pinball_backend/compare/v1.1.1...v1.1.2) (2026-04-03)
 
 
