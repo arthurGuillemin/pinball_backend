@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/arthurGuillemin/pinball_backend/compare/v1.2.0...v1.2.1) (2026-04-03)
+
+
+### Bug Fixes
+
+* **cdProduction:** fix docker image version ([b386268](https://github.com/arthurGuillemin/pinball_backend/commit/b386268740955e99d6555ade9c31fcb2e77e6d92))
+
 # [1.2.0](https://github.com/arthurGuillemin/pinball_backend/compare/v1.1.5...v1.2.0) (2026-04-03)
 
 
