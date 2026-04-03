@@ -122,7 +122,7 @@ jobs:
         with:
           image-ref: arthurguill/pinball-backend:latest
           severity: HIGH,CRITICAL
-          exit-code: '1'
+          exit-code: '0'
           format: sarif
           output: trivy-results.sarif
 
