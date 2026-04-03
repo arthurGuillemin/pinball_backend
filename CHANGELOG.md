@@ -1,3 +1,11 @@
+# [1.2.0](https://github.com/arthurGuillemin/pinball_backend/compare/v1.1.5...v1.2.0) (2026-04-03)
+
+
+### Features
+
+* **health:** add /health endpoint with Supabase check ([dee3e52](https://github.com/arthurGuillemin/pinball_backend/commit/dee3e52ee56be2ae88d44f6004a30e7749d20c7e))
+* **healthh:** implement health endpoint ([583eb84](https://github.com/arthurGuillemin/pinball_backend/commit/583eb844515bccbff03c0036ef370bc7335a0709))
+
 ## [1.1.5](https://github.com/arthurGuillemin/pinball_backend/compare/v1.1.4...v1.1.5) (2026-04-03)
 
 
