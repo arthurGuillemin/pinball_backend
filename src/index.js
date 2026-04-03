@@ -1,6 +1,7 @@
 //libs
 import express from "express";
 import scoresRouter from "./routes/scores.route.js";
+import healthRouter from "./routes/health.route.js";
 import cors from "cors";
 import pinoHttp from "pino-http";
 //functions
@@ -32,8 +33,9 @@ app.get("/", (req, res) => {
   res.json({ status: "server is on" });
 });
 
-// scores routes
+//  routes
 app.use("/api/scores", scoresRouter);
+app.use("/api/health", healthRouter);
 
 // WebSockets
 setupWebSockets(httpServer);
