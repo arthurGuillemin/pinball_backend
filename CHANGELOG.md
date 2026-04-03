@@ -1,3 +1,11 @@
+## [1.1.4](https://github.com/arthurGuillemin/pinball_backend/compare/v1.1.3...v1.1.4) (2026-04-03)
+
+
+### Bug Fixes
+
+* **ci:** rempove wrong node version syntax ([f86edd8](https://github.com/arthurGuillemin/pinball_backend/commit/f86edd826a7b20ed5e7208b86829a3fe7e2f40ff))
+* **ci:** tag latest to docker image and syntax correction node version in yml ([de0035f](https://github.com/arthurGuillemin/pinball_backend/commit/de0035fdb607007bab3c8e74a56af2da218924b6))
+
 ## [1.1.3](https://github.com/arthurGuillemin/pinball_backend/compare/v1.1.2...v1.1.3) (2026-04-03)
 
 
