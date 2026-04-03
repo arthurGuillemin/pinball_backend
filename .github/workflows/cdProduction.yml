@@ -164,7 +164,7 @@ jobs:
         run: |
           curl -H "Content-Type: application/json" \
             -d "{\"content\": \" **Nouvelle Release en prod v${{ needs.release.outputs.new_release_version }}**\n succes :  https://flipper-backend-app.azurewebsites.net\n Triggered by @${{ github.actor }}\"}" \
-            https://discord.com/api/webhooks/1473998987647389808/ZsCBgLwqTHKFX9sDFzARyihGzGCVKH_LgAk_sLIT768BwNCBOtMVX4JmHscQGbKW3aBN
+            ${{ secrets.DISCORD_WEBHOOK }}
 
       - name: Notify failure
         if: needs.deploy.result == 'failure' || needs.build-and-scan.result == 'failure'
@@ -175,4 +175,4 @@ jobs:
           fi
           curl -H "Content-Type: application/json" \
             -d "{\"content\": \" **Nouvelle Release en prod v${{ needs.release.outputs.new_release_version }} failes**\n at: ${REASON}\n Triggered by @${{ github.actor }}\n\nCheck logs: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\"}" \
-            https://discord.com/api/webhooks/1473998987647389808/ZsCBgLwqTHKFX9sDFzARyihGzGCVKH_LgAk_sLIT768BwNCBOtMVX4JmHscQGbKW3aBN
+            ${{ secrets.DISCORD_WEBHOOK }}
