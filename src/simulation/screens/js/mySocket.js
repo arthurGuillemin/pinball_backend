@@ -12,6 +12,7 @@ function Dispatcher(obj) {
             this.eventListererList[eventType].push(callbackFunction);
         }
     }
+    
     obj.dispatchEvent = function (eventType, data) {
         eventType = eventType.replace(/\s+/g, '').toUpperCase();
         let eventList = this.eventListererList[eventType];

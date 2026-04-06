@@ -14,6 +14,8 @@ if (isset($_GET['ip']))
 }
 
 
+
+
 if (isset($_COOKIE['ip']))
 {
     $ip = $_COOKIE['ip'];

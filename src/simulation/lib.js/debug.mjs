@@ -5,6 +5,8 @@ function tabulation(index) {
 }
 
 
+
+
 const obj = {
     classToExclude: ["WebSocket", "Person"],
     log(obj) {

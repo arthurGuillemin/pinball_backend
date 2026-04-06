@@ -17,6 +17,7 @@ function hitRight() {
 function unhitRight() {
     document.querySelector("#right").style.transform = "rotate(0deg)";
 }
+
 function hitLeft() {
     document.querySelector("#left").style.transform = "rotate(-65deg)";
 }

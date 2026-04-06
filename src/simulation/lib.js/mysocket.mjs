@@ -11,6 +11,8 @@ var MySocket = {
             this.table[socketId].add(obj.socket);
         }
     },
+
+    
     removeBySocket: function (socket) {
         let idClient;
         for (var key in this.table) {

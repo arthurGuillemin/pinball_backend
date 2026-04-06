@@ -17,6 +17,8 @@ require_once("./top.php");
         background-color: red;
     }
 
+
+    
     #white {
         background-color: white;
     }

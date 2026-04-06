@@ -18,6 +18,8 @@ client.on("connect", () => {
 
 
 
+
+
 client.on("message", (topic, message) => {
     const telemetry = JSON.parse(message.toString());
     console.log(telemetry);

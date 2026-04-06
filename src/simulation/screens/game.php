@@ -9,6 +9,7 @@ require_once("./top.php");
     <script src="./js/mySocket.js" defer></script>
     <script src="./js/game.js" defer></script>
 
+    
     <title>PinBall</title>
     <style>
         body {
