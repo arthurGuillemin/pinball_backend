@@ -1,16 +1,5 @@
-let rotate_red = false;
 
-function rotateRedBox() {
-    rotate_red = !rotate_red;
-    document.querySelector("#red").classList.toggle("redRotated", rotate_red);
-}
 
-let rotate_blue = false;
-
-function rotateBlueBox() {
-    rotate_blue = !rotate_blue;
-    document.querySelector("#blue").classList.toggle("rotated", rotate_blue);
-}
 function hitRight() {
     document.querySelector("#right").style.transform = "rotate(65deg)";
 }
@@ -37,12 +26,6 @@ function animateLauncher(val) {
         launcher.animate(
             [
                 { transform: "translateY(" + val + "px)" },
-                // { transform: "translateY(0)" },
-                // { transform: "translateY(" + val / 2 + "px)" },
-                // { transform: "translateY(0)" },
-                // { transform: "translateY(" + val / 4 + "px)" },
-                // { transform: "translateY(0)" },
-                // { transform: "translateY(" + val / 8 + "px)" },
                 { transform: "translateY(0)" }
             ],
             {
