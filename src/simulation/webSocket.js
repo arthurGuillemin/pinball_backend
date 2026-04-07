@@ -33,15 +33,19 @@ wss.on("connection", (wsocket) => {
     });
 });
 
+
+
 wss.on('error', (err) => {
     if (err.code === 'EADDRINUSE') {
         console.error(`Error: Port ${PORT} is already in use.`);
         // Action: Exit or try another port
         process.exit(1);
+
     } else if (err.code === 'EACCES') {
         console.error(`Error: Permission denied for port ${PORT}.`);
         process.exit(1);
     } else {
+
         throw err;
     }
 });
