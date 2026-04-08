@@ -163,7 +163,7 @@ jobs:
         if: needs.deploy.result == 'success'
         run: |
           curl -H "Content-Type: application/json" \
-            -d "{\"content\": \" **Nouvelle Release en prod v${{ needs.release.outputs.new_release_version }}**\n succes :  https://flipper-backend-app.azurewebsites.net\n Triggered by @${{ github.actor }}\"}" \
+            -d "{\"content\": \" **Backend : Nouvelle Release en prod v${{ needs.release.outputs.new_release_version }}**\n succes :  https://flipper-backend-app.azurewebsites.net\n Triggered by @${{ github.actor }}\"}" \
             ${{ secrets.DISCORD_WEBHOOK }}
 
       - name: Notify failure
@@ -174,5 +174,5 @@ jobs:
             REASON="security scan (Trivy)"
           fi
           curl -H "Content-Type: application/json" \
-            -d "{\"content\": \" **Nouvelle Release en prod v${{ needs.release.outputs.new_release_version }} failes**\n at: ${REASON}\n Triggered by @${{ github.actor }}\n\nCheck logs: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\"}" \
+            -d "{\"content\": \" **Backend : Nouvelle Release en prod v${{ needs.release.outputs.new_release_version }} failes**\n at: ${REASON}\n Triggered by @${{ github.actor }}\n\nCheck logs: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\"}" \
             ${{ secrets.DISCORD_WEBHOOK }}
