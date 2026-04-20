@@ -35,7 +35,6 @@ mqttClient.on("message", (topic, message) => {
 });
 
 mqttClient.on('error', (err) => {
-    // console.error('Error:', err);
     console.log("ERROR");
 });
 
