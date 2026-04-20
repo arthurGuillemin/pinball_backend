@@ -18,7 +18,7 @@ class AppError extends Error {
     super(message, { cause });
     this.name = this.constructor.name;
     this.statusCode = statusCode;
-    this.status = statusCode >= 500 ? "error" : "fail";
+    this.status = statusCode >= 500 ? 'error' : 'fail';
     this.isOperational = true;
     this.details = details ?? null;
     Error.captureStackTrace(this, this.constructor);
@@ -36,43 +36,43 @@ class AppError extends Error {
 }
 
 class BadRequestError extends AppError {
-  constructor(message = "Bad request", options) {
+  constructor(message = 'Bad request', options) {
     super(message, HTTP_STATUS.BAD_REQUEST, options);
   }
 }
 
 class UnauthorizedError extends AppError {
-  constructor(message = "Unauthorized", options) {
+  constructor(message = 'Unauthorized', options) {
     super(message, HTTP_STATUS.UNAUTHORIZED, options);
   }
 }
 
 class ForbiddenError extends AppError {
-  constructor(message = "Forbidden", options) {
+  constructor(message = 'Forbidden', options) {
     super(message, HTTP_STATUS.FORBIDDEN, options);
   }
 }
 
 class NotFoundError extends AppError {
-  constructor(message = "Resource not found", options) {
+  constructor(message = 'Resource not found', options) {
     super(message, HTTP_STATUS.NOT_FOUND, options);
   }
 }
 
 class ConflictError extends AppError {
-  constructor(message = "Conflict", options) {
+  constructor(message = 'Conflict', options) {
     super(message, HTTP_STATUS.CONFLICT, options);
   }
 }
 
 class ValidationError extends AppError {
-  constructor(message = "Validation failed", options) {
+  constructor(message = 'Validation failed', options) {
     super(message, HTTP_STATUS.UNPROCESSABLE, options);
   }
 }
 
 class InternalError extends AppError {
-  constructor(message = "Internal server error", options) {
+  constructor(message = 'Internal server error', options) {
     super(message, HTTP_STATUS.INTERNAL, options);
   }
 }

@@ -17,7 +17,7 @@ services:
     container_name: MyMosquitto
     restart: always
     ports:
-      - "1883:1883"
+      - '1883:1883'
     volumes:
       - ./mosquitto/config:/mosquitto/config
       - ./mosquitto/data:/mosquitto/data
@@ -115,9 +115,9 @@ log_dest file /mosquitto/log/mosquitto.log
 
 Pour un usage en production :
 
-* Désactiver `allow_anonymous`
-* Ajouter un fichier de mots de passe
-* Configurer TLS/SSL
+- Désactiver `allow_anonymous`
+- Ajouter un fichier de mots de passe
+- Configurer TLS/SSL
 
 ---
 
@@ -141,9 +141,9 @@ docker-compose down
 
 ## ✅ Résumé
 
-* Broker MQTT prêt à l’emploi
-* Persistance des données et logs
-* Facilement extensible pour la production
+- Broker MQTT prêt à l’emploi
+- Persistance des données et logs
+- Facilement extensible pour la production
 
 ---
 

@@ -6,11 +6,11 @@ Ce projet est un client MQTT simple écrit en Node.js utilisant la bibliothèque
 
 ## 🚀 Fonctionnalités
 
-* Connexion à un broker MQTT
-* Abonnement à un topic spécifique
-* Réception et parsing des messages JSON
-* Envoi d’un message à la connexion
-* Gestion des événements (reconnexion, erreur, offline, etc.)
+- Connexion à un broker MQTT
+- Abonnement à un topic spécifique
+- Réception et parsing des messages JSON
+- Envoi d’un message à la connexion
+- Gestion des événements (reconnexion, erreur, offline, etc.)
 
 ---
 
@@ -30,15 +30,15 @@ npm install mqtt
 Trois serveurs MQTT sont définis dans le code :
 
 ```js
-const PROF_MQTT_SERVER_LINK = "mqtt://captain.dev0.pandor.cloud:1884";
-const BATNA_MQTT_SERVER_LINK = "mqtt://batna.freemyip.com:1883";
-const LOCAL_MQTT_SERVER_LINK = "mqtt://localhost:1883";
+const PROF_MQTT_SERVER_LINK = 'mqtt://captain.dev0.pandor.cloud:1884';
+const BATNA_MQTT_SERVER_LINK = 'mqtt://batna.freemyip.com:1883';
+const LOCAL_MQTT_SERVER_LINK = 'mqtt://localhost:1883';
 ```
 
 👉 Par défaut, le client se connecte à :
 
 ```js
-PROF_MQTT_SERVER_LINK
+PROF_MQTT_SERVER_LINK;
 ```
 
 Tu peux changer le serveur en modifiant cette ligne :
@@ -52,14 +52,14 @@ const mqttClient = mqtt.connect(PROF_MQTT_SERVER_LINK);
 ## 🧭 Topic utilisé
 
 ```js
-const MQTT_TOPIC = "Pinball/Younes";
+const MQTT_TOPIC = 'Pinball/Younes';
 ```
 
 Le client :
 
-* s’abonne à ce topic
-* écoute les messages entrants
-* attend un JSON valide
+- s’abonne à ce topic
+- écoute les messages entrants
+- attend un JSON valide
 
 ---
 
@@ -75,8 +75,8 @@ node index.js
 
 ### À la connexion :
 
-* Souscription au topic
-* Envoi d’un message :
+- Souscription au topic
+- Envoi d’un message :
 
 ```text
 Client Say → Hello mqtt
@@ -86,13 +86,13 @@ Client Say → Hello mqtt
 
 ### À la réception d’un message :
 
-* Conversion en JSON
-* Affichage dans la console
+- Conversion en JSON
+- Affichage dans la console
 
 ```js
-mqttClient.on("message", (topic, message) => {
-    const telemetry = JSON.parse(message.toString());
-    console.log(telemetry);
+mqttClient.on('message', (topic, message) => {
+  const telemetry = JSON.parse(message.toString());
+  console.log(telemetry);
 });
 ```
 
@@ -118,18 +118,18 @@ mqttClient.on("message", (topic, message) => {
 Le client tente de se reconnecter toutes les secondes :
 
 ```js
-reconnectPeriod: 1000
+reconnectPeriod: 1000;
 ```
 
 ---
 
 ## 🛠️ Améliorations possibles
 
-* Gestion d’erreurs JSON (`try/catch`)
-* Ajout d’un système de logs structuré
-* Support de plusieurs topics
-* Configuration via variables d’environnement (.env)
-* Ajout d’un publisher séparé
+- Gestion d’erreurs JSON (`try/catch`)
+- Ajout d’un système de logs structuré
+- Support de plusieurs topics
+- Configuration via variables d’environnement (.env)
+- Ajout d’un publisher séparé
 
 ---
 
@@ -145,4 +145,5 @@ reconnectPeriod: 1000
 ---
 
 ## 👨‍💻 Auteur
-- Pinbal Groupe N° 007 
+
+- Pinbal Groupe N° 007
