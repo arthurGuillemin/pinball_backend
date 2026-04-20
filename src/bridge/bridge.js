@@ -3,7 +3,7 @@ import mqtt from 'mqtt';
 
 
 const PROF_MQTT_SERVER_LINK = "mqtt://captain.dev0.pandor.cloud:1884";
-const MY_MQTT_SERVER_LINK = "mqtt://batna.freemyip.com:1883";
+const BATNA_MQTT_SERVER_LINK = "mqtt://batna.freemyip.com:1883";
 const LOCAL_MQTT_SERVER_LINK = "mqtt://localhost:1883";
 
 
@@ -11,7 +11,7 @@ const MQTT_TOPIC = "Pinball/Younes";
 
 
 
-const mqttClient = mqtt.connect(LOCAL_MQTT_SERVER_LINK,
+const mqttClient = mqtt.connect(PROF_MQTT_SERVER_LINK,
     {
         reconnectPeriod: 1000
     }
