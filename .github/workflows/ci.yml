@@ -67,10 +67,6 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
-
-      - name: Build application
-        run: npm run build
-
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
