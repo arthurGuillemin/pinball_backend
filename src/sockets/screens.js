@@ -1,6 +1,6 @@
-import { WebSocketServer } from "ws";
-import { getState, startGame, registerHit, losesBall } from "../game/state.js";
-import logger from "../utils/logger.js";
+import { WebSocketServer } from 'ws';
+import { getState, startGame, registerHit, losesBall } from '../game/state.js';
+import logger from '../utils/logger.js';
 const screensWss = new WebSocketServer({ noServer: true });
 
 const broadcast = (data) => {
@@ -11,31 +11,31 @@ const broadcast = (data) => {
   });
 };
 
-screensWss.on("connection", (ws) => {
-  logger.info("debug : co sur le /screensq");
+screensWss.on('connection', (ws) => {
+  logger.info('debug : co sur le /screensq');
 
-  ws.send(JSON.stringify({ type: "state_update", state: getState() }));
+  ws.send(JSON.stringify({ type: 'state_update', state: getState() }));
 
-  ws.on("message", (msg) => {
+  ws.on('message', (msg) => {
     const data = JSON.parse(msg.toString());
-    if (data.type === "start_game") {
+    if (data.type === 'start_game') {
       const state = startGame(data.playerName);
-      broadcast({ type: "state_update", state });
+      broadcast({ type: 'state_update', state });
     }
-    if (data.type === "hit") {
+    if (data.type === 'hit') {
       const state = registerHit(data.points);
-      broadcast({ type: "state_update", state });
+      broadcast({ type: 'state_update', state });
     }
-    if (data.type === "ball_lost") {
+    if (data.type === 'ball_lost') {
       const state = losesBall();
-      broadcast({ type: "state_update", state });
+      broadcast({ type: 'state_update', state });
       if (!state.isRunning) {
-        broadcast({ type: "game_over", state });
+        broadcast({ type: 'game_over', state });
       }
     }
   });
 
-  ws.on("close", () => logger.info("deco de /screeen"));
+  ws.on('close', () => logger.info('deco de /screeen'));
 });
 
 export default screensWss;

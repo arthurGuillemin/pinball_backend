@@ -1,7 +1,7 @@
-import pino from "pino";
-import appInsights from "applicationinsights";
+import pino from 'pino';
+import appInsights from 'applicationinsights';
 
-const isDev = process.env.NODE_ENV !== "production";
+const isDev = process.env.NODE_ENV !== 'production';
 const hasAppInsights = Boolean(process.env.APPINSIGHTS_INSTRUMENTATIONKEY);
 
 function createAppInsightsClient() {
@@ -16,7 +16,7 @@ function createAppInsightsClient() {
   return appInsights.defaultClient;
 }
 
-function createBaseLogger(level = "info") {
+function createBaseLogger(level = 'info') {
   return pino({
     level,
     base: undefined,
@@ -40,7 +40,7 @@ function applyAppInsightsTransport(baseLogger, client) {
     if (isReady()) {
       client.trackException({ exception, properties });
     } else {
-      console.error("[AppInsights fallback]", exception);
+      console.error('[AppInsights fallback]', exception);
     }
   };
 
@@ -54,19 +54,19 @@ function applyAppInsightsTransport(baseLogger, client) {
 function createLogger() {
   if (isDev) {
     return pino({
-      level: "debug",
+      level: 'debug',
       transport: {
-        target: "pino-pretty",
+        target: 'pino-pretty',
         options: {
           colorize: true,
-          translateTime: "HH:MM:ss",
-          ignore: "pid,hostname",
+          translateTime: 'HH:MM:ss',
+          ignore: 'pid,hostname',
         },
       },
     });
   }
 
-  const baseLogger = createBaseLogger("info");
+  const baseLogger = createBaseLogger('info');
 
   if (hasAppInsights) {
     const client = createAppInsightsClient();

@@ -40,7 +40,7 @@ Les valeurs `SUPABASE_URL` et `SUPABASE_ANON_KEY` sont disponibles dans le dashb
 ## Lancement
 
 ```bash
-# Dev 
+# Dev
 npm run dev
 
 # Prod
@@ -69,6 +69,7 @@ src/
 Retourne le top 10 des scores les plus élevés.
 
 **Réponse**
+
 ```json
 [
   { "id": 1, "player_name": "Arthur", "score": 42000, "created_at": "..." },
@@ -83,6 +84,7 @@ Retourne le top 10 des scores les plus élevés.
 Ajoute un nouveau score.
 
 **Body**
+
 ```json
 {
   "player_name": "Arthur",
@@ -91,6 +93,7 @@ Ajoute un nouveau score.
 ```
 
 **Réponse** `201`
+
 ```json
 { "id": 2, "player_name": "Arthur", "score": 42000, "created_at": "..." }
 ```
@@ -101,12 +104,12 @@ Ajoute un nouveau score.
 
 Table Supabase `scores` :
 
-| Colonne | Type | Description |
-|---|---|---|
-| `id` | int8 | primary key auto-incr |
-| `player_name` | varchar | Nom du joueur |
-| `score` | int8 | Score final |
-| `created_at` | timestamptz | Date d'insert automatique |
+| Colonne       | Type        | Description               |
+| ------------- | ----------- | ------------------------- |
+| `id`          | int8        | primary key auto-incr     |
+| `player_name` | varchar     | Nom du joueur             |
+| `score`       | int8        | Score final               |
+| `created_at`  | timestamptz | Date d'insert automatique |
 
 ---
 
