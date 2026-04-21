@@ -6,7 +6,7 @@ export const getLeaderboard = async () => {
     .from('scores')
     .select('*')
     .order('score', { ascending: false })
-    .limit(10);
+    .limit(5);
   if (error) throw new AppError(error.message, 500);
   return data;
 };

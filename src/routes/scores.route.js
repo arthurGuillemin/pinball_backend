@@ -8,8 +8,8 @@ import {
 import postScoreLimiter from '../middlewares/rateLimit.js';
 const router = Router();
 
-// GET /api/scores - top 10
-router.get('/', getLeaderboard);
+// GET /api/scores/leaderboard - top 5
+router.get('/leaderboard', getLeaderboard);
 
 // POST /api/scores - add score
 router.post('/', postScoreLimiter, validate(scoreSchema), addNewScore);

@@ -24,7 +24,7 @@ vi.mock('../config/db.js', () => ({
   },
 }));
 
-describe('GET /api/scores', () => {
+describe('GET /api/scores/leaderboard', () => {
   it('retourne un tableau de scores', async () => {
     const res = await request(app).get('/api/scores');
     expect(res.status).toBe(200);
