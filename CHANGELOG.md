@@ -1,17 +1,15 @@
 # [1.3.0](https://github.com/arthurGuillemin/pinball_backend/compare/v1.2.1...v1.3.0) (2026-04-20)
 
-
 ### Bug Fixes
 
-* **bridge:** Remove commented error logging in MQTT client ([743d730](https://github.com/arthurGuillemin/pinball_backend/commit/743d7302e953d0e5120cf92556ae5c755ca0192d))
-* **ci:** remove build from ci ([3f85341](https://github.com/arthurGuillemin/pinball_backend/commit/3f853411628059ef9d909bcdc9ef4a9d2f1102ca))
-* **ci:** remove matrix and fix Node.js version to 22 for tests ([0ffcf48](https://github.com/arthurGuillemin/pinball_backend/commit/0ffcf482f6d817de1808766e9f4a84eec27ba927))
-
+- **bridge:** Remove commented error logging in MQTT client ([743d730](https://github.com/arthurGuillemin/pinball_backend/commit/743d7302e953d0e5120cf92556ae5c755ca0192d))
+- **ci:** remove build from ci ([3f85341](https://github.com/arthurGuillemin/pinball_backend/commit/3f853411628059ef9d909bcdc9ef4a9d2f1102ca))
+- **ci:** remove matrix and fix Node.js version to 22 for tests ([0ffcf48](https://github.com/arthurGuillemin/pinball_backend/commit/0ffcf482f6d817de1808766e9f4a84eec27ba927))
 
 ### Features
 
-* **ci:** add eslint and prettier configuration ([231bcc2](https://github.com/arthurGuillemin/pinball_backend/commit/231bcc2869c2a2ce434782888cf92caabbc827d1))
-* **format:** format codebase with prettier ([29c33c1](https://github.com/arthurGuillemin/pinball_backend/commit/29c33c1bdef4f25471e33cc69de5259c3a6370fd))
+- **ci:** add eslint and prettier configuration ([231bcc2](https://github.com/arthurGuillemin/pinball_backend/commit/231bcc2869c2a2ce434782888cf92caabbc827d1))
+- **format:** format codebase with prettier ([29c33c1](https://github.com/arthurGuillemin/pinball_backend/commit/29c33c1bdef4f25471e33cc69de5259c3a6370fd))
 
 ## [1.2.1](https://github.com/arthurGuillemin/pinball_backend/compare/v1.2.0...v1.2.1) (2026-04-03)
 
