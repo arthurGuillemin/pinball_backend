@@ -11,10 +11,10 @@ export const getLeaderboard = async () => {
   return data;
 };
 
-export const addNewScore = async (PlayerName, score) => {
+export const addNewScore = async (PlayerName, score, avatar) => {
   const { data, error } = await supabase
     .from('scores')
-    .insert({ player_name: PlayerName, score: score })
+    .insert({ player_name: PlayerName, score: score, avatar: avatar })
     .select();
   if (error) throw AppError(error.message, 400);
   return data;
