@@ -24,9 +24,9 @@ vi.mock('../config/db.js', () => ({
   },
 }));
 
-describe('GET /api/scores', () => {
+describe('GET /api/scores/leaderboard', () => {
   it('retourne un tableau de scores', async () => {
-    const res = await request(app).get('/api/scores');
+    const res = await request(app).get('/api/scores/leaderboard');
     expect(res.status).toBe(200);
     expect(res.body.status).toBe('success');
     expect(Array.isArray(res.body.data)).toBe(true);
@@ -38,7 +38,7 @@ describe('POST /api/scores', () => {
   it('crée un score et retourne 201', async () => {
     const res = await request(app)
       .post('/api/scores')
-      .send({ playerName: 'Test', score: 1000 });
+      .send({ playerName: 'Test', score: 1000, avatar: 'Chalice' });
 
     expect(res.status).toBe(201);
     expect(res.body.status).toBe('success');
