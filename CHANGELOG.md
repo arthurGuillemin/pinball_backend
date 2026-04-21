@@ -1,3 +1,15 @@
+# [1.4.0](https://github.com/arthurGuillemin/pinball_backend/compare/v1.3.0...v1.4.0) (2026-04-21)
+
+
+### Bug Fixes
+
+* **format:** run prettier with --write ([f53d778](https://github.com/arthurGuillemin/pinball_backend/commit/f53d778aa66645db85bd65ee87dae4cbf46f2728))
+
+
+### Features
+
+* **communication:** improve game state management && web sockets ([f205700](https://github.com/arthurGuillemin/pinball_backend/commit/f205700401ca71bcc92c00dd4be377899fcd286d))
+
 # [1.3.0](https://github.com/arthurGuillemin/pinball_backend/compare/v1.2.1...v1.3.0) (2026-04-20)
 
 ### Bug Fixes
