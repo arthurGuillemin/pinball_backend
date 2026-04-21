@@ -1,20 +1,26 @@
-import esp32Wss from './hardware.js';
 import { URL } from 'node:url';
-import backglassWss from './screens.js';
+import esp32Wss from '../sockets/hardware.js';
+import screensWss from '../sockets/screens.js';
+import logger from '../utils/logger.js';
+
+const ROUTES = {
+  '/esp32': esp32Wss,
+  '/screens': screensWss,
+};
+
 export function setupWebSockets(httpServer) {
   httpServer.on('upgrade', (request, socket, head) => {
-    const pathname = new URL(request.url, 'http://localhost').pathname;
+    const { pathname } = new URL(request.url, 'http://localhost');
+    const wss = ROUTES[pathname];
 
-    if (pathname === '/esp32') {
-      esp32Wss.handleUpgrade(request, socket, head, (ws) => {
-        esp32Wss.emit('connection', ws, request);
-      });
-    } else if (pathname === '/screens') {
-      backglassWss.handleUpgrade(request, socket, head, (ws) => {
-        backglassWss.emit('connection', ws, request);
-      });
-    } else {
+    if (!wss) {
+      logger.warn(`[WS] Route inconnue : ${pathname}`);
       socket.destroy();
+      return;
     }
+
+    wss.handleUpgrade(request, socket, head, (ws) => {
+      wss.emit('connection', ws, request);
+    });
   });
 }
