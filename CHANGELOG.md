@@ -1,3 +1,19 @@
+# [1.5.0](https://github.com/arthurGuillemin/pinball_backend/compare/v1.4.0...v1.5.0) (2026-04-21)
+
+
+### Bug Fixes
+
+* apply prettier formatting ([abeda5e](https://github.com/arthurGuillemin/pinball_backend/commit/abeda5ee402a1f1546c486e8ec285cb110511e33))
+* **ci:** remove formatcheck from ci ([702d747](https://github.com/arthurGuillemin/pinball_backend/commit/702d747b81cdce7ce26d5e4fdb38b9db3d371467))
+* **prettierrc:** add endOfLine ([2c81c30](https://github.com/arthurGuillemin/pinball_backend/commit/2c81c303e97e2a7f069ccafc46fa28eac2fd0e25))
+
+
+### Features
+
+* **lint format:** add --write to format ([8dfc218](https://github.com/arthurGuillemin/pinball_backend/commit/8dfc21870c9b8d0cff1677bcc338d0bcb64b34dd))
+* **score:** add avatar name to players ([54c6e9a](https://github.com/arthurGuillemin/pinball_backend/commit/54c6e9abcee636a5b585880ecd7448b752775780))
+* **tests:** update post tests ([6e9a896](https://github.com/arthurGuillemin/pinball_backend/commit/6e9a89644e5f8835de44d0f319f409bc087181b7))
+
 # [1.4.0](https://github.com/arthurGuillemin/pinball_backend/compare/v1.3.0...v1.4.0) (2026-04-21)
 
 
