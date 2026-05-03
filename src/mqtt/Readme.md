@@ -63,13 +63,28 @@ Le broker MQTT est exposé sur le port :
 1883
 ```
 
+### Add New User 
+
+  - docker exec -it mosquitto<Container ID> /bin/sh
+  - mosquitto_passwd /mosquitto/config/pwfile myusername
+  - prompt pour entrer le mot de passe et le confirmer
+  - exit
+  - restart le conteuneur 
+
+
+
 ### 🔗 Endpoint de test
 
 Vous pouvez tester la connectivité via :
 
+user = arthur 
+password = 1234
+
+
 ```
 http://batna.freemyip.com:1883
 ```
+
 
 ⚠️ Remarque : MQTT utilise un protocole spécifique, donc ce lien HTTP sert uniquement à vérifier l'accessibilité réseau (pas une interface web).
 
