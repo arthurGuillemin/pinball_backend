@@ -8,5 +8,6 @@ services:
       - '1883:1883'
     volumes:
       - ./mosquitto/config:/mosquitto/config
+      - ./mosquitto/config/pwfile:/mosquitto/config/pwfile
       - ./mosquitto/data:/mosquitto/data
       - ./mosquitto/log:/mosquitto/log
