@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/arthurGuillemin/pinball_backend/compare/v1.5.0...v1.6.0) (2026-05-18)
+
+
+### Features
+
+* add Auth to MQTT Server ([2329721](https://github.com/arthurGuillemin/pinball_backend/commit/2329721c19040742c6f83e7c6872424dce776551))
+
 # [1.5.0](https://github.com/arthurGuillemin/pinball_backend/compare/v1.4.0...v1.5.0) (2026-04-21)
 
 
