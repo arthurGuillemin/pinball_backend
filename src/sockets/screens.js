@@ -10,7 +10,9 @@ class ScreensWebSocketServer {
 
   static MESSAGE_TYPES = {
     START_GAME: 'start_game',
-    HIT: 'hit',
+    BUMPER_HIT: 'bumper_hit',
+    SLINGSHOT_HIT: 'slingshot_hit',
+    LIGHT_SENSOR: 'light_sensor',
     BALL_LOST: 'ball_lost',
   };
 
@@ -24,7 +26,12 @@ class ScreensWebSocketServer {
     this.messageHandlers = {
       [ScreensWebSocketServer.MESSAGE_TYPES.START_GAME]:
         this.handleStartGame.bind(this),
-      [ScreensWebSocketServer.MESSAGE_TYPES.HIT]: this.handleHit.bind(this),
+      [ScreensWebSocketServer.MESSAGE_TYPES.BUMPER_HIT]:
+        this.handleBumperHit.bind(this),
+      [ScreensWebSocketServer.MESSAGE_TYPES.SLINGSHOT_HIT]:
+        this.handleSlingshotHit.bind(this),
+      [ScreensWebSocketServer.MESSAGE_TYPES.LIGHT_SENSOR]:
+        this.handleLightSensor.bind(this),
       [ScreensWebSocketServer.MESSAGE_TYPES.BALL_LOST]:
         this.handleBallLost.bind(this),
     };
@@ -52,16 +59,27 @@ class ScreensWebSocketServer {
     this.broadcast(ScreensWebSocketServer.WS_EVENTS.STATE_UPDATE, state);
   }
 
-  handleHit(data) {
-    const state = gameState.registerHit(data.points);
-    logger.info(`[GAMEState] Bumper hit new score is : ${state.score}`);
+  handleBumperHit(data) {
+    const state = gameState.registerBumperHit(data.bumperId);
+    logger.info(`[GAME] Bumper  hit - State: ${JSON.stringify(state)}`);
+    this.broadcast(ScreensWebSocketServer.WS_EVENTS.STATE_UPDATE, state);
+  }
+
+  handleSlingshotHit(data) {
+    const state = gameState.registerSlingshotHit(data.slingshotId);
+    logger.info(`[GAME] Slingshot hit - Score: ${state.score}`);
+    this.broadcast(ScreensWebSocketServer.WS_EVENTS.STATE_UPDATE, state);
+  }
+
+  handleLightSensor(data) {
+    const state = gameState.registerLightSensor(data.sensorId);
+    logger.info(`[GAME] light sensor activated - Score: ${state.score}`);
     this.broadcast(ScreensWebSocketServer.WS_EVENTS.STATE_UPDATE, state);
   }
 
   handleBallLost() {
     const state = gameState.losesBall();
     logger.info(`[GAME] ball lost  / remaining : ${state.balls}`);
-
     this.broadcast(ScreensWebSocketServer.WS_EVENTS.STATE_UPDATE, state);
 
     if (gameState.isGameOver()) {
@@ -72,8 +90,6 @@ class ScreensWebSocketServer {
 
   setupConnection() {
     this.wss.on('connection', (ws) => {
-      logger.info('[Screens] Client connecté');
-
       this.send(
         ws,
         ScreensWebSocketServer.WS_EVENTS.STATE_UPDATE,
@@ -101,9 +117,7 @@ class ScreensWebSocketServer {
         }
       });
 
-      ws.on('close', () => {
-        logger.info('[Screens] Client déconnecté');
-      });
+      ws.on('close', () => {});
 
       ws.on('error', (err) => {
         logger.error('[Screens] Erreur WS :', err.message);
