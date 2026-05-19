@@ -1,41 +1,49 @@
 import mqtt from 'mqtt';
+import env from '../config/env.js';
+import logger from '../utils/logger.js';
 
-const PROF_MQTT_SERVER_LINK = 'mqtt://captain.dev0.pandor.cloud:1884';
-const BATNA_MQTT_SERVER_LINK = 'mqtt://batna.freemyip.com:1883';
-const LOCAL_MQTT_SERVER_LINK = 'mqtt://localhost:1883';
+const MQTT_CONFIG = {
+  host: env.MQTT_SERVER_IP || 'mqtt://localhost:1883',
+  username: env.MQTT_USERNAME || 'arthur',
+  password: env.MQTT_PASSWORD || '1234',
+  topic: env.MQTT_TOPIC || 'Pinball/Team7',
+};
 
-const MQTT_TOPIC = 'Pinball/Younes';
-
-const mqttClient = mqtt.connect(PROF_MQTT_SERVER_LINK, {
+const mqttClient = mqtt.connect(MQTT_CONFIG.host, {
   reconnectPeriod: 1000,
+  username: MQTT_CONFIG.username,
+  password: MQTT_CONFIG.password,
 });
 
 mqttClient.on('connect', () => {
-  mqttClient.subscribe(MQTT_TOPIC, (err) => {
-    if (!err) {
-      console.log('subscribed to this topic --> ' + MQTT_TOPIC);
-      mqttClient.publish('Client Say', 'Hello mqtt');
+  mqttClient.subscribe(MQTT_CONFIG.topic, (err) => {
+    if (err) {
+      logger.error(`Subscribe failed: ${err.message}`);
+      return;
+    } else {
+      logger.info('subscribed to TOPIC --> ' + MQTT_CONFIG.topic);
+      mqttClient.publish('PinBall', 'Connected ...');
     }
   });
 });
 
 mqttClient.on('message', (topic, message) => {
   const telemetry = JSON.parse(message.toString());
-  console.log(telemetry);
+  logger.info(telemetry);
 });
 
 mqttClient.on('error', (err) => {
-  console.log('ERROR');
+  logger.error('ERROR');
 });
 
 mqttClient.on('close', () => {
-  console.log('Connection closed');
+  logger.warn('Connection closed');
 });
 
 mqttClient.on('reconnect', () => {
-  console.log('Reconnecting...');
+  logger.info('Reconnecting...');
 });
 
 mqttClient.on('offline', () => {
-  console.log('offline');
+  logger.info('offline');
 });
