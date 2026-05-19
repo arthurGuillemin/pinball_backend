@@ -2,60 +2,133 @@ import { WebSocketServer } from 'ws';
 import gameState from '../game/state.js';
 import logger from '../utils/logger.js';
 
-const screensWss = new WebSocketServer({ noServer: true });
+class ScreensWebSocketServer {
+  static WS_EVENTS = {
+    STATE_UPDATE: 'state_update',
+    GAME_OVER: 'game_over',
+  };
 
-const broadcast = (type, state) => {
-  const payload = JSON.stringify({ type, state });
-  screensWss.clients.forEach((client) => {
-    if (client.readyState === 1) {
-      client.send(payload);
-    }
-  });
-};
+  static MESSAGE_TYPES = {
+    START_GAME: 'start_game',
+    BUMPER_HIT: 'bumper_hit',
+    SLINGSHOT_HIT: 'slingshot_hit',
+    LIGHT_SENSOR: 'light_sensor',
+    BALL_LOST: 'ball_lost',
+  };
 
-const MESSAGE_HANDLERS = {
-  start_game: (data) => {
+  constructor() {
+    this.wss = new WebSocketServer({ noServer: true });
+    this.setupMessageHandlers();
+    this.setupConnection();
+  }
+
+  setupMessageHandlers() {
+    this.messageHandlers = {
+      [ScreensWebSocketServer.MESSAGE_TYPES.START_GAME]:
+        this.handleStartGame.bind(this),
+      [ScreensWebSocketServer.MESSAGE_TYPES.BUMPER_HIT]:
+        this.handleBumperHit.bind(this),
+      [ScreensWebSocketServer.MESSAGE_TYPES.SLINGSHOT_HIT]:
+        this.handleSlingshotHit.bind(this),
+      [ScreensWebSocketServer.MESSAGE_TYPES.LIGHT_SENSOR]:
+        this.handleLightSensor.bind(this),
+      [ScreensWebSocketServer.MESSAGE_TYPES.BALL_LOST]:
+        this.handleBallLost.bind(this),
+    };
+  }
+
+  send(client, type, state) {
+    if (client.readyState !== 1) return;
+    client.send(
+      JSON.stringify({
+        type,
+        state,
+      })
+    );
+  }
+
+  broadcast(type, state) {
+    this.wss.clients.forEach((client) => {
+      this.send(client, type, state);
+    });
+  }
+
+  handleStartGame(data) {
     const state = gameState.startGame(data.playerName);
-    broadcast('state_update', state);
-  },
-  hit: (data) => {
-    const state = gameState.registerHit(data.points);
-    broadcast('state_update', state);
-  },
-  ball_lost: () => {
+    logger.info(`[GAMEState] New Game started`);
+    this.broadcast(ScreensWebSocketServer.WS_EVENTS.STATE_UPDATE, state);
+  }
+
+  handleBumperHit(data) {
+    const state = gameState.registerBumperHit(data.bumperId);
+    logger.info(`[GAME] Bumper  hit - State: ${JSON.stringify(state)}`);
+    this.broadcast(ScreensWebSocketServer.WS_EVENTS.STATE_UPDATE, state);
+  }
+
+  handleSlingshotHit(data) {
+    const state = gameState.registerSlingshotHit(data.slingshotId);
+    logger.info(`[GAME] Slingshot hit - Score: ${state.score}`);
+    this.broadcast(ScreensWebSocketServer.WS_EVENTS.STATE_UPDATE, state);
+  }
+
+  handleLightSensor(data) {
+    const state = gameState.registerLightSensor(data.sensorId);
+    logger.info(`[GAME] light sensor activated - Score: ${state.score}`);
+    this.broadcast(ScreensWebSocketServer.WS_EVENTS.STATE_UPDATE, state);
+  }
+
+  handleBallLost() {
     const state = gameState.losesBall();
-    broadcast('state_update', state);
+    logger.info(`[GAME] ball lost  / remaining : ${state.balls}`);
+    this.broadcast(ScreensWebSocketServer.WS_EVENTS.STATE_UPDATE, state);
+
     if (gameState.isGameOver()) {
-      broadcast('game_over', state);
+      logger.info('[GAME] Game Over');
+      this.broadcast(ScreensWebSocketServer.WS_EVENTS.GAME_OVER, state);
     }
-  },
-};
+  }
 
-screensWss.on('connection', (ws) => {
-  logger.info('[Screens] Client connecté');
-  ws.send(
-    JSON.stringify({ type: 'state_update', state: gameState.getState() })
-  );
+  setupConnection() {
+    this.wss.on('connection', (ws) => {
+      this.send(
+        ws,
+        ScreensWebSocketServer.WS_EVENTS.STATE_UPDATE,
+        gameState.getState()
+      );
 
-  ws.on('message', (msg) => {
-    logger.info(gameState.getState());
-    try {
-      const data = JSON.parse(msg.toString());
-      const handler = MESSAGE_HANDLERS[data.type];
+      ws.on('message', (msg) => {
+        logger.info(msg.toString());
+        try {
+          const data = JSON.parse(msg.toString());
+          if (!data?.type) {
+            logger.warn('[Screens] Message sans type');
+            return;
+          }
 
-      if (!handler) {
-        logger.warn(`[Screens] Type de message inconnu : ${data.type}`);
-        return;
-      }
+          const handler = this.messageHandlers[data.type];
+          if (!handler) {
+            logger.warn(`[Screens] Type de message inconnu : ${data.type}`);
+            return;
+          }
 
-      handler(data);
-    } catch (err) {
-      logger.error('[Screens] Erreur parsing message :', err.message);
-    }
-  });
+          handler(data);
+        } catch (err) {
+          logger.error('[Screens] Erreur traitement message :', err.message);
+        }
+      });
 
-  ws.on('close', () => logger.info('[Screens] Client déconnecté'));
-  ws.on('error', (err) => logger.error('[Screens] Erreur WS :', err.message));
-});
+      ws.on('close', () => {});
 
-export default screensWss;
+      ws.on('error', (err) => {
+        logger.error('[Screens] Erreur WS :', err.message);
+      });
+    });
+  }
+
+  getServer() {
+    return this.wss;
+  }
+}
+
+const screensWss = new ScreensWebSocketServer();
+export default screensWss.getServer();

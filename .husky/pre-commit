@@ -1,4 +1,4 @@
 npx lint-staged
 npm run test
-npm run format
+npm run format --write
 npm run format:check

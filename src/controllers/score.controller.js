@@ -10,8 +10,8 @@ export const getLeaderboard = catchAsync(async (req, res) => {
 });
 
 export const addNewScore = catchAsync(async (req, res) => {
-  const { playerName, score } = req.body;
-  const newScore = await scoreService.addNewScore(playerName, score);
+  const { playerName, score, avatar } = req.body;
+  const newScore = await scoreService.addNewScore(playerName, score, avatar);
   res.status(201).json({
     status: 'success',
     data: newScore,
