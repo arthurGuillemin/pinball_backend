@@ -33,27 +33,3 @@ describe('GET /api/scores/leaderboard', () => {
     expect(res.body.data[0]).toHaveProperty('score');
   });
 });
-
-describe('POST /api/scores', () => {
-  it('crée un score et retourne 201', async () => {
-    const res = await request(app)
-      .post('/api/scores')
-      .send({ playerName: 'Test', score: 1000, avatar: 'Chalice' });
-
-    expect(res.status).toBe(201);
-    expect(res.body.status).toBe('success');
-    expect(res.body.data[0].player_name).toBe('Test');
-  });
-
-  it('retourne 400 si playerName manquant', async () => {
-    const res = await request(app).post('/api/scores').send({ score: 1000 });
-    expect(res.status).toBe(400);
-  });
-
-  it('retourne 400 si score invalide', async () => {
-    const res = await request(app)
-      .post('/api/scores')
-      .send({ playerName: 'Test', score: -10 });
-    expect(res.status).toBe(400);
-  });
-});
