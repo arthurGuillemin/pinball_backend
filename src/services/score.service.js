@@ -16,6 +16,6 @@ export const addNewScore = async (PlayerName, score, avatar) => {
     .from('scores')
     .insert({ player_name: PlayerName, score: score, avatar: avatar })
     .select();
-  if (error) throw AppError(error.message, 400);
+  if (error) throw new AppError(error.message, 400);
   return data;
 };

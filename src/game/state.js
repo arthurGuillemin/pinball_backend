@@ -22,6 +22,7 @@ class GameState {
       balls: INITIAL_BALLS,
       currentPlayer: null,
       lightsActivated: new Set(),
+      avatar: 'cuphead',
     };
   }
 
@@ -35,7 +36,7 @@ class GameState {
     return !this.#state.isRunning;
   }
 
-  startGame(playerName = 'Joueur') {
+  startGame(playerName = 'UnknowPlayer') {
     const cleanName = playerName?.trim();
     if (!cleanName) {
       throw new Error('playerName est requis');

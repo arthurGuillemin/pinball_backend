@@ -1,6 +1,7 @@
 import { WebSocketServer } from 'ws';
 import gameState from '../game/state.js';
 import logger from '../utils/logger.js';
+import * as scoreService from '../services/score.service.js';
 
 class ScreensWebSocketServer {
   static WS_EVENTS = {
@@ -77,13 +78,25 @@ class ScreensWebSocketServer {
     this.broadcast(ScreensWebSocketServer.WS_EVENTS.STATE_UPDATE, state);
   }
 
-  handleBallLost() {
+  async handleBallLost() {
     const state = gameState.losesBall();
-    logger.info(`[GAME] ball lost  / remaining : ${state.balls}`);
+    logger.info(`[GAME] ball lost / remaining : ${state.balls}`);
     this.broadcast(ScreensWebSocketServer.WS_EVENTS.STATE_UPDATE, state);
 
     if (gameState.isGameOver()) {
       logger.info('[GAME] Game Over');
+      try {
+        await scoreService.addNewScore(
+          state.currentPlayer,
+          state.score,
+          state.avatar
+        );
+        logger.info(
+          `[GAME] Score sauvegardé : ${state.currentPlayer} - ${state.score}`
+        );
+      } catch (err) {
+        logger.error('[GAME] Erreur sauvegarde score :', err.message);
+      }
       this.broadcast(ScreensWebSocketServer.WS_EVENTS.GAME_OVER, state);
     }
   }
