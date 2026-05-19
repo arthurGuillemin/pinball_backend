@@ -4,10 +4,10 @@ class GameState {
   #state;
 
   constructor() {
-    this.#state = this.#initialState();
+    this.reset();
   }
 
-  #initialState() {
+  #createInitialState() {
     return {
       isRunning: false,
       score: 0,
@@ -17,43 +17,66 @@ class GameState {
   }
 
   getState() {
-    return { ...this.#state };
+    return structuredClone(this.#state);
   }
 
   isGameOver() {
-    return this.#state.balls <= 0 && !this.#state.isRunning;
+    return !this.#state.isRunning;
   }
 
   startGame(playerName = 'Joueur') {
-    if (!playerName?.trim()) throw new Error('playerName est requis');
+    const cleanName = playerName?.trim();
+
+    if (!cleanName) {
+      throw new Error('playerName est requis');
+    }
+
     this.#state = {
-      ...this.#initialState(),
+      ...this.#createInitialState(),
       isRunning: true,
-      currentPlayer: playerName.trim(),
+      currentPlayer: cleanName,
     };
+
     return this.getState();
   }
 
   reset() {
-    this.#state = this.#initialState();
+    this.#state = this.#createInitialState();
     return this.getState();
   }
 
-  registerHit(points) {
-    if (!this.#state.isRunning) return this.getState();
-    if (typeof points !== 'number' || points <= 0) {
-      throw new Error('points doit être un nombre positif');
+  registerHit(points = 0) {
+    if (!this.#state.isRunning) {
+      return this.getState();
     }
-    this.#state.score += points;
+
+    const parsedPoints = Number(points);
+
+    if (Number.isNaN(parsedPoints) || parsedPoints < 0) {
+      throw new Error('Points invalides');
+    }
+
+    this.#state = {
+      ...this.#state,
+      score: this.#state.score + parsedPoints,
+    };
+
     return this.getState();
   }
 
   losesBall() {
-    if (!this.#state.isRunning) return this.getState();
-    this.#state.balls -= 1;
-    if (this.#state.balls <= 0) {
-      this.#state.isRunning = false;
+    if (!this.#state.isRunning) {
+      return this.getState();
     }
+
+    const remainingBalls = Math.max(this.#state.balls - 1, 0);
+
+    this.#state = {
+      ...this.#state,
+      balls: remainingBalls,
+      isRunning: remainingBalls > 0,
+    };
+
     return this.getState();
   }
 }

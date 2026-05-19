@@ -17,7 +17,6 @@ jobs:
         env:
           GITGUARDIAN_API_KEY: ${{ secrets.GITGUARDIAN_API_KEY }}
 
-
   test:
     needs: [security-scan]
     runs-on: ubuntu-latest
