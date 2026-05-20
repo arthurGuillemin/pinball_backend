@@ -9,7 +9,7 @@ const MQTT_CONFIG = {
   topic: env.MQTT_TOPIC || 'Pinball/Team7',
 };
 
-export function makeBridge() {
+export function createMqttBridge() {
   return mqtt.connect(MQTT_CONFIG.host, {
     reconnectPeriod: 1000,
     username: MQTT_CONFIG.username,
@@ -17,31 +17,31 @@ export function makeBridge() {
   });
 }
 
-export function setupMqtt(mqttClient) {
-  mqttClient.on('connect', () => {
-    mqttClient.subscribe(MQTT_CONFIG.topic, (err) => {
+export function setupMqttBridge(mqttBridge) {
+  mqttBridge.on('connect', () => {
+    mqttBridge.subscribe(MQTT_CONFIG.topic, (err) => {
       if (err) {
         logger.error(`Subscribe failed: ${err.message}`);
         return;
       } else {
         logger.info('subscribed to TOPIC --> ' + MQTT_CONFIG.topic);
-        mqttClient.publish('PinBall', 'Connected ...');
+        mqttBridge.publish('PinBall', 'Connected ...');
       }
     });
   });
-  mqttClient.on('error', (err) => {
+  mqttBridge.on('error', (err) => {
     logger.error('ERROR');
   });
 
-  mqttClient.on('close', () => {
+  mqttBridge.on('close', () => {
     logger.warn('Connection closed');
   });
 
-  mqttClient.on('reconnect', () => {
+  mqttBridge.on('reconnect', () => {
     logger.info('Reconnecting...');
   });
 
-  mqttClient.on('offline', () => {
+  mqttBridge.on('offline', () => {
     logger.info('offline');
   });
 }

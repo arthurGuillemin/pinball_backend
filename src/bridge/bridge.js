@@ -1,12 +1,12 @@
 import logger from '../utils/logger.js';
 
-import { makeBridge, setupMqtt } from './setupBridge.js';
+import { createMqttBridge, setupMqttBridge } from './setupBridge.js';
 
-const mqttClient = makeBridge();
+const mqttBridge = createMqttBridge();
 
-setupMqtt(mqttClient);
+setupMqttBridge(mqttBridge);
 
-mqttClient.on('message', (topic, message) => {
+mqttBridge.on('message', (topic, message) => {
   const telemetry = JSON.parse(message.toString());
   logger.info(telemetry);
 });
