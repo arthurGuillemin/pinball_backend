@@ -1,3 +1,10 @@
+## [1.6.1](https://github.com/arthurGuillemin/pinball_backend/compare/v1.6.0...v1.6.1) (2026-05-21)
+
+
+### Bug Fixes
+
+* **bridge:** correction et mise de constante ([b20a9ef](https://github.com/arthurGuillemin/pinball_backend/commit/b20a9ef3ff4af7cc2943b23df512c70af42e5451))
+
 # [1.6.0](https://github.com/arthurGuillemin/pinball_backend/compare/v1.5.0...v1.6.0) (2026-05-18)
 
 
