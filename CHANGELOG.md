@@ -1,3 +1,11 @@
+# [1.8.0](https://github.com/arthurGuillemin/pinball_backend/compare/v1.7.0...v1.8.0) (2026-05-22)
+
+
+### Features
+
+* **esp32:** socket avec bridge ([475fc39](https://github.com/arthurGuillemin/pinball_backend/commit/475fc399ff69c95e525651865e47c937589d6d1f))
+* **mqtt:** mqtt with websocket intergrated ([ca3cd29](https://github.com/arthurGuillemin/pinball_backend/commit/ca3cd29b7a37dfcffd995b186f50ae268023b4dc))
+
 # [1.7.0](https://github.com/arthurGuillemin/pinball_backend/compare/v1.6.1...v1.7.0) (2026-05-21)
 
 
