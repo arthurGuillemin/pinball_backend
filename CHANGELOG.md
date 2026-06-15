@@ -1,3 +1,10 @@
+## [1.8.1](https://github.com/arthurGuillemin/pinball_backend/compare/v1.8.0...v1.8.1) (2026-06-15)
+
+
+### Bug Fixes
+
+* **screen:** change type when broadcast ([ca71538](https://github.com/arthurGuillemin/pinball_backend/commit/ca71538668dc49bf8e6a573df6daa140595aee5d))
+
 # [1.8.0](https://github.com/arthurGuillemin/pinball_backend/compare/v1.7.0...v1.8.0) (2026-05-22)
 
 
