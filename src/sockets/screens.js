@@ -15,6 +15,8 @@ class ScreensWebSocketServer {
     SLINGSHOT_HIT: 'slingshot_hit',
     LIGHT_SENSOR: 'light_sensor',
     BALL_LOST: 'ball_lost',
+    CARD_HIT: 'card_hit',
+    ALLCARDSDOWN: 'all_cards_down',
   };
 
   constructor() {
@@ -66,6 +68,18 @@ class ScreensWebSocketServer {
     this.broadcast(ScreensWebSocketServer.WS_EVENTS.STATE_UPDATE, state);
   }
 
+  handleCardHit(data) {
+    const state = gameState.registerCardHit();
+    logger.info(`carte touchée : state ${JSON.stringify(state)} `);
+    this.broadcast(ScreensWebSocketServer.WS_EVENTS.STATE_UPDATE, state);
+  }
+
+  handleCardsDown(data) {
+    const state = gameState.registerAllCardsDown(data.times);
+    logger.info(`toute les cartes tombées : state ${JSON.stringify(state)} `);
+    this.broadcast(ScreensWebSocketServer.WS_EVENTS.STATE_UPDATE, state);
+  }
+
   handleSlingshotHit(data) {
     const state = gameState.registerSlingshotHit(data.slingshotId);
     logger.info(`[GAME] Slingshot hit - Score: ${state.score}`);
@@ -74,7 +88,9 @@ class ScreensWebSocketServer {
 
   handleLightSensor(data) {
     const state = gameState.registerLightSensor(data.sensorId);
-    logger.info(`[GAME] light sensor activated - Score: ${state.score}`);
+    logger.info(
+      `[GAME] light sensor activated State: ${JSON.stringify(state)} `
+    );
     this.broadcast(ScreensWebSocketServer.WS_EVENTS.STATE_UPDATE, state);
   }
 
@@ -110,7 +126,6 @@ class ScreensWebSocketServer {
       );
 
       ws.on('message', (msg) => {
-        logger.info(msg.toString());
         try {
           const data = JSON.parse(msg.toString());
           if (!data?.type) {

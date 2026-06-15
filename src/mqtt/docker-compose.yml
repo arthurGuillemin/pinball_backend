@@ -5,7 +5,8 @@ services:
     container_name: MyMosquitto
     restart: always
     ports:
-      - '1883:1883'
+      - "1883:1883"
+      - "9001:9001"
     volumes:
       - ./mosquitto/config:/mosquitto/config
       - ./mosquitto/config/pwfile:/mosquitto/config/pwfile
