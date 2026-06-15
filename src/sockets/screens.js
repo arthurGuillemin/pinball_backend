@@ -57,31 +57,31 @@ class ScreensWebSocketServer {
   handleStartGame(data) {
     const state = gameState.startGame(data.playerName);
     logger.info(`[GAMEState] New Game started`);
-    this.broadcast(ScreensWebSocketServer.WS_EVENTS.STATE_UPDATE, state);
+    this.broadcast(ScreensWebSocketServer.MESSAGE_TYPES.START_GAME, state);
   }
 
   handleBumperHit(data) {
     const state = gameState.registerBumperHit(data.bumperId);
     logger.info(`[GAME] Bumper  hit - State: ${JSON.stringify(state)}`);
-    this.broadcast(ScreensWebSocketServer.WS_EVENTS.STATE_UPDATE, state);
+    this.broadcast(ScreensWebSocketServer.MESSAGE_TYPES.BUMPER_HIT, state);
   }
 
   handleSlingshotHit(data) {
     const state = gameState.registerSlingshotHit(data.slingshotId);
     logger.info(`[GAME] Slingshot hit - Score: ${state.score}`);
-    this.broadcast(ScreensWebSocketServer.WS_EVENTS.STATE_UPDATE, state);
+    this.broadcast(ScreensWebSocketServer.MESSAGE_TYPES.SLINGSHOT_HIT, state);
   }
 
   handleLightSensor(data) {
     const state = gameState.registerLightSensor(data.sensorId);
     logger.info(`[GAME] light sensor activated - Score: ${state.score}`);
-    this.broadcast(ScreensWebSocketServer.WS_EVENTS.STATE_UPDATE, state);
+    this.broadcast(ScreensWebSocketServer.MESSAGE_TYPES.LIGHT_SENSOR, state);
   }
 
   async handleBallLost() {
     const state = gameState.losesBall();
     logger.info(`[GAME] ball lost / remaining : ${state.balls}`);
-    this.broadcast(ScreensWebSocketServer.WS_EVENTS.STATE_UPDATE, state);
+    this.broadcast(ScreensWebSocketServer.MESSAGE_TYPES.BALL_LOST, state);
 
     if (gameState.isGameOver()) {
       logger.info('[GAME] Game Over');
