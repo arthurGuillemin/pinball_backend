@@ -6,6 +6,7 @@ const POINTS_CONFIG = {
   SLINGSHOT: 50,
   LIGHT_SENSOR: 200,
   ALL_LIGHTS_BONUS: 1000,
+  CARDSDOWN: 4000,
 };
 
 class GameState {
@@ -79,6 +80,9 @@ class GameState {
 
   registerSlingshotHit() {
     return this.#addPoints(POINTS_CONFIG.SLINGSHOT);
+  }
+  registerAllCardsDown() {
+    return this.#addPoints(POINTS_CONFIG.CARDSDOWN);
   }
 
   registerLightSensor(sensorId) {

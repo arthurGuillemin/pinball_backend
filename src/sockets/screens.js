@@ -15,6 +15,7 @@ class ScreensWebSocketServer {
     SLINGSHOT_HIT: 'slingshot_hit',
     LIGHT_SENSOR: 'light_sensor',
     BALL_LOST: 'ball_lost',
+    CARDS_DOWN: 'cards_down',
   };
 
   constructor() {
@@ -35,6 +36,8 @@ class ScreensWebSocketServer {
         this.handleLightSensor.bind(this),
       [ScreensWebSocketServer.MESSAGE_TYPES.BALL_LOST]:
         this.handleBallLost.bind(this),
+      [ScreensWebSocketServer.MESSAGE_TYPES.CARDS_DOWN]:
+        this.handleCardsDown.bind(this),
     };
   }
 
@@ -57,31 +60,37 @@ class ScreensWebSocketServer {
   handleStartGame(data) {
     const state = gameState.startGame(data.playerName);
     logger.info(`[GAMEState] New Game started`);
-    this.broadcast(ScreensWebSocketServer.MESSAGE_TYPES.START_GAME, state);
+    this.broadcast(ScreensWebSocketServer.WS_EVENTS.STATE_UPDATE, state);
   }
 
   handleBumperHit(data) {
     const state = gameState.registerBumperHit(data.bumperId);
     logger.info(`[GAME] Bumper  hit - State: ${JSON.stringify(state)}`);
-    this.broadcast(ScreensWebSocketServer.MESSAGE_TYPES.BUMPER_HIT, state);
+    this.broadcast(ScreensWebSocketServer.WS_EVENTS.STATE_UPDATE, state);
+  }
+
+  handleCardsDown(data) {
+    const state = gameState.registerAllCardsDown();
+    logger.info(`[GAME] all cards are down - State: ${JSON.stringify(state)}`);
+    this.broadcast(ScreensWebSocketServer.WS_EVENTS.STATE_UPDATE, state);
   }
 
   handleSlingshotHit(data) {
     const state = gameState.registerSlingshotHit(data.slingshotId);
     logger.info(`[GAME] Slingshot hit - Score: ${state.score}`);
-    this.broadcast(ScreensWebSocketServer.MESSAGE_TYPES.SLINGSHOT_HIT, state);
+    this.broadcast(ScreensWebSocketServer.WS_EVENTS.STATE_UPDATE, state);
   }
 
   handleLightSensor(data) {
     const state = gameState.registerLightSensor(data.sensorId);
     logger.info(`[GAME] light sensor activated - Score: ${state.score}`);
-    this.broadcast(ScreensWebSocketServer.MESSAGE_TYPES.LIGHT_SENSOR, state);
+    this.broadcast(ScreensWebSocketServer.WS_EVENTS.STATE_UPDATE, state);
   }
 
   async handleBallLost() {
     const state = gameState.losesBall();
     logger.info(`[GAME] ball lost / remaining : ${state.balls}`);
-    this.broadcast(ScreensWebSocketServer.MESSAGE_TYPES.BALL_LOST, state);
+    this.broadcast(ScreensWebSocketServer.WS_EVENTS.STATE_UPDATE, state);
 
     if (gameState.isGameOver()) {
       logger.info('[GAME] Game Over');
