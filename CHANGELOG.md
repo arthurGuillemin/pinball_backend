@@ -1,3 +1,10 @@
+# [1.9.0](https://github.com/arthurGuillemin/pinball_backend/compare/v1.8.1...v1.9.0) (2026-06-17)
+
+
+### Features
+
+* **annexe:** add annexe crads down event ([1a33920](https://github.com/arthurGuillemin/pinball_backend/commit/1a33920253e5c34da9feadfe55c227cc1634a2c4))
+
 ## [1.8.1](https://github.com/arthurGuillemin/pinball_backend/compare/v1.8.0...v1.8.1) (2026-06-15)
 
 
