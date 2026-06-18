@@ -1,3 +1,10 @@
+# [1.10.0](https://github.com/arthurGuillemin/pinball_backend/compare/v1.9.0...v1.10.0) (2026-06-18)
+
+
+### Features
+
+* **state:** make playername communication bw backglass & gamestate ([6c55e3b](https://github.com/arthurGuillemin/pinball_backend/commit/6c55e3ba979a73eae799a4bdbe2e9fa21ad0f6b3))
+
 # [1.9.0](https://github.com/arthurGuillemin/pinball_backend/compare/v1.8.1...v1.9.0) (2026-06-17)
 
 
