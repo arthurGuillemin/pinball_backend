@@ -7,34 +7,30 @@
 
 ## [1.8.1](https://github.com/arthurGuillemin/pinball_backend/compare/v1.8.0...v1.8.1) (2026-06-15)
 
-
 ### Bug Fixes
 
-* **screen:** change type when broadcast ([ca71538](https://github.com/arthurGuillemin/pinball_backend/commit/ca71538668dc49bf8e6a573df6daa140595aee5d))
+- **screen:** change type when broadcast ([ca71538](https://github.com/arthurGuillemin/pinball_backend/commit/ca71538668dc49bf8e6a573df6daa140595aee5d))
 
 # [1.8.0](https://github.com/arthurGuillemin/pinball_backend/compare/v1.7.0...v1.8.0) (2026-05-22)
 
-
 ### Features
 
-* **esp32:** socket avec bridge ([475fc39](https://github.com/arthurGuillemin/pinball_backend/commit/475fc399ff69c95e525651865e47c937589d6d1f))
-* **mqtt:** mqtt with websocket intergrated ([ca3cd29](https://github.com/arthurGuillemin/pinball_backend/commit/ca3cd29b7a37dfcffd995b186f50ae268023b4dc))
+- **esp32:** socket avec bridge ([475fc39](https://github.com/arthurGuillemin/pinball_backend/commit/475fc399ff69c95e525651865e47c937589d6d1f))
+- **mqtt:** mqtt with websocket intergrated ([ca3cd29](https://github.com/arthurGuillemin/pinball_backend/commit/ca3cd29b7a37dfcffd995b186f50ae268023b4dc))
 
 # [1.7.0](https://github.com/arthurGuillemin/pinball_backend/compare/v1.6.1...v1.7.0) (2026-05-21)
 
-
 ### Features
 
-* **score:** handle undefined username & avatar , add score to db when game over ([16f73b2](https://github.com/arthurGuillemin/pinball_backend/commit/16f73b2c06c5092ac296a50a70973234fc2ad67c))
-* **score:** handle undefined username & avatar , add score to db when game over ([746c920](https://github.com/arthurGuillemin/pinball_backend/commit/746c920ec8090c09f4115177a9c75925ce4e2a64))
-* **state , screen:** make backend truth source ([27c649e](https://github.com/arthurGuillemin/pinball_backend/commit/27c649e7a7c717dcf8e126ba04ac24f12ed52f9d))
+- **score:** handle undefined username & avatar , add score to db when game over ([16f73b2](https://github.com/arthurGuillemin/pinball_backend/commit/16f73b2c06c5092ac296a50a70973234fc2ad67c))
+- **score:** handle undefined username & avatar , add score to db when game over ([746c920](https://github.com/arthurGuillemin/pinball_backend/commit/746c920ec8090c09f4115177a9c75925ce4e2a64))
+- **state , screen:** make backend truth source ([27c649e](https://github.com/arthurGuillemin/pinball_backend/commit/27c649e7a7c717dcf8e126ba04ac24f12ed52f9d))
 
 ## [1.6.1](https://github.com/arthurGuillemin/pinball_backend/compare/v1.6.0...v1.6.1) (2026-05-21)
 
-
 ### Bug Fixes
 
-* **bridge:** correction et mise de constante ([b20a9ef](https://github.com/arthurGuillemin/pinball_backend/commit/b20a9ef3ff4af7cc2943b23df512c70af42e5451))
+- **bridge:** correction et mise de constante ([b20a9ef](https://github.com/arthurGuillemin/pinball_backend/commit/b20a9ef3ff4af7cc2943b23df512c70af42e5451))
 
 # [1.6.0](https://github.com/arthurGuillemin/pinball_backend/compare/v1.5.0...v1.6.0) (2026-05-18)
 
