@@ -1,3 +1,10 @@
+## [1.10.2](https://github.com/arthurGuillemin/pinball_backend/compare/v1.10.1...v1.10.2) (2026-06-19)
+
+
+### Bug Fixes
+
+* **cors:** remove cors ([f2d016a](https://github.com/arthurGuillemin/pinball_backend/commit/f2d016a985fd59e1d49d4f7da86ed903e5435769))
+
 ## [1.10.1](https://github.com/arthurGuillemin/pinball_backend/compare/v1.10.0...v1.10.1) (2026-06-19)
 
 
