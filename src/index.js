@@ -2,7 +2,7 @@
 import express from 'express';
 import scoresRouter from './routes/scores.route.js';
 import healthRouter from './routes/health.route.js';
-// import cors from 'cors';
+import cors from 'cors';
 import pinoHttp from 'pino-http';
 //functions
 import { setupWebSockets } from './sockets/index.js';
@@ -17,12 +17,7 @@ const app = express();
 const httpServer = createServer(app);
 
 // cors
-const allowedOrigins = env.ALLOWED_ORIGINS;
-// app.use(
-//   cors({
-//     origin: env.NODE_ENV === 'production' ? allowedOrigins : '*',
-//   })
-// );
+app.use(cors({ origin: '*' }));
 
 app.use(express.json());
 app.use(helmetMiddleware);
