@@ -1,13 +1,15 @@
 import dotenv from 'dotenv';
 import { z } from 'zod';
 import logger from '../utils/logger.js';
-import AppError from '../utils/appError.js';
+import { AppError } from '../utils/appError.js';
 
-dotenv.config({ path: process.env.NODE_ENV === 'test' ? '.env.test' : '.env' });
+dotenv.config({
+  path: ['test', 'e2e'].includes(process.env.NODE_ENV) ? '.env.test' : '.env',
+});
 
 const envSchema = z.object({
   NODE_ENV: z
-    .enum(['development', 'production', 'test'])
+    .enum(['development', 'production', 'test', 'e2e'])
     .default('development'),
   PORT: z.string().transform(Number).default('3000'),
   SUPABASE_URL: z.string().url(),
@@ -19,7 +21,7 @@ const _env = envSchema.safeParse(process.env);
 
 if (!_env.success) {
   logger.error({ err: _env.error.format() }, 'invalid env variables');
-  if (process.env.NODE_ENV !== 'test') {
+  if (!['test', 'e2e'].includes(process.env.NODE_ENV)) {
     process.exit(1);
   } else {
     throw new AppError('Invalid env variables');

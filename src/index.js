@@ -1,44 +1,59 @@
-//libs
 import express from 'express';
-import scoresRouter from './routes/scores.route.js';
-import healthRouter from './routes/health.route.js';
 import cors from 'cors';
 import pinoHttp from 'pino-http';
-//functions
-import { setupWebSockets } from './sockets/index.js';
 import { createServer } from 'http';
+
+import scoresRouter from './routes/scores.route.js';
+import healthRouter from './routes/health.route.js';
+import { setupWebSockets } from './sockets/index.js';
 import errorHandler from './middlewares/errorHandler.js';
-import AppError from './utils/appError.js';
-import logger from './utils/logger.js';
 import helmetMiddleware from './middlewares/helmet.js';
+import logger from './utils/logger.js';
 import env from './config/env.js';
-const PORT = env.PORT;
+import gameState from './game/state.js';
+import screensWssServer, { wss as screensClients } from './sockets/screens.js';
+
+process.on('uncaughtException', (err) => {
+  logger.error({ err }, 'uncaughtException');
+  process.exit(1);
+});
+
+process.on('unhandledRejection', (reason) => {
+  logger.error({ err: reason }, 'unhandledRejection');
+  process.exit(1);
+});
+
 const app = express();
 const httpServer = createServer(app);
 
-// cors
-app.use(cors({ origin: '*' }));
+app.use(helmetMiddleware);
+
+app.use(cors({ origin: env.ALLOWED_ORIGINS }));
 
 app.use(express.json());
-app.use(helmetMiddleware);
 app.use(pinoHttp({ logger, redact: ['req.headers.authorization'] }));
 
-// test route
-app.get('/', (req, res) => {
-  res.json({ status: 'server is on' });
-});
-
-//  routes
+app.get('/', (req, res) => res.json({ status: 'server is on' }));
 app.use('/api/scores', scoresRouter);
 app.use('/api/health', healthRouter);
 
-// WebSockets
+if (process.env.NODE_ENV === 'e2e') {
+  app.post('/__test/reset', async (req, res) => {
+    screensClients.clients.forEach((client) => client.terminate());
+    await new Promise((resolve) => setTimeout(resolve, 50));
+    gameState.reset();
+    res.json({ reset: true });
+  });
+}
+
 setupWebSockets(httpServer);
 
-logger.info('logger init et pret');
-httpServer.listen(PORT, () => {
-  logger.info(`Serveur lancé sur le port ${PORT}`);
-});
-
 app.use(errorHandler);
+
+if (process.env.NODE_ENV !== 'test') {
+  httpServer.listen(env.PORT, () => {
+    logger.info(`Serveur lancé sur le port ${env.PORT}`);
+  });
+}
+
 export { app, httpServer };

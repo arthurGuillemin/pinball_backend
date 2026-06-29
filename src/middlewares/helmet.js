@@ -1,11 +1,19 @@
 import helmet from 'helmet';
-import env from '../config/env.js';
-const isProd = env.NODE_ENV === 'production';
 
+/**
+ * helmetMiddleware — sécurise les headers HTTP.
+ *
+ * contentSecurityPolicy désactivé : ce backend ne sert pas de HTML,
+ * CSP ne s'applique qu'aux navigateurs recevant du markup.
+ *
+ * referrerPolicy 'no-referrer' : évite de leaker des URLs internes
+ * dans le header Referer des requêtes sortantes.
+ *
+ * HSTS non activé : géré au niveau du reverse proxy nginx en production.
+ */
 const helmetMiddleware = helmet({
-  contentSecurityPolicy: false, // a n'activer que pour des backends qui servent du html
-  referrerPolicy: { policy: 'no-referrer' }, //evite que le serveur leak des url interne
-  //hsts: isProd? { maxAge: 31536000, includeSubDomains: true,}: false,
-}); // force le https en prod desac pour l'instant
+  contentSecurityPolicy: false,
+  referrerPolicy: { policy: 'no-referrer' },
+});
 
 export default helmetMiddleware;
