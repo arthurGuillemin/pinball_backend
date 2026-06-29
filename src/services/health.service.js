@@ -1,5 +1,5 @@
 import supabase from '../config/db.js';
-import AppError from '../utils/appError.js';
+import { AppError } from '../utils/appError.js';
 
 export const getHealth = async () => {
   const { data, error } = await supabase.rpc('healthcheck');

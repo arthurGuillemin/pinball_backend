@@ -1,5 +1,5 @@
 import supabase from '../config/db.js';
-import AppError from '../utils/appError.js';
+import { AppError } from '../utils/appError.js';
 
 export const getLeaderboard = async () => {
   const { data, error } = await supabase
