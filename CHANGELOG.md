@@ -1,30 +1,26 @@
 ## [1.10.2](https://github.com/arthurGuillemin/pinball_backend/compare/v1.10.1...v1.10.2) (2026-06-19)
 
-
 ### Bug Fixes
 
-* **cors:** remove cors ([f2d016a](https://github.com/arthurGuillemin/pinball_backend/commit/f2d016a985fd59e1d49d4f7da86ed903e5435769))
+- **cors:** remove cors ([f2d016a](https://github.com/arthurGuillemin/pinball_backend/commit/f2d016a985fd59e1d49d4f7da86ed903e5435769))
 
 ## [1.10.1](https://github.com/arthurGuillemin/pinball_backend/compare/v1.10.0...v1.10.1) (2026-06-19)
 
-
 ### Bug Fixes
 
-* **cors:** remove cors ([6ed699c](https://github.com/arthurGuillemin/pinball_backend/commit/6ed699c8f97b4c9419bb22156bca68db6ea08e9d))
+- **cors:** remove cors ([6ed699c](https://github.com/arthurGuillemin/pinball_backend/commit/6ed699c8f97b4c9419bb22156bca68db6ea08e9d))
 
 # [1.10.0](https://github.com/arthurGuillemin/pinball_backend/compare/v1.9.0...v1.10.0) (2026-06-18)
 
-
 ### Features
 
-* **state:** make playername communication bw backglass & gamestate ([6c55e3b](https://github.com/arthurGuillemin/pinball_backend/commit/6c55e3ba979a73eae799a4bdbe2e9fa21ad0f6b3))
+- **state:** make playername communication bw backglass & gamestate ([6c55e3b](https://github.com/arthurGuillemin/pinball_backend/commit/6c55e3ba979a73eae799a4bdbe2e9fa21ad0f6b3))
 
 # [1.9.0](https://github.com/arthurGuillemin/pinball_backend/compare/v1.8.1...v1.9.0) (2026-06-17)
 
-
 ### Features
 
-* **annexe:** add annexe crads down event ([1a33920](https://github.com/arthurGuillemin/pinball_backend/commit/1a33920253e5c34da9feadfe55c227cc1634a2c4))
+- **annexe:** add annexe crads down event ([1a33920](https://github.com/arthurGuillemin/pinball_backend/commit/1a33920253e5c34da9feadfe55c227cc1634a2c4))
 
 ## [1.8.1](https://github.com/arthurGuillemin/pinball_backend/compare/v1.8.0...v1.8.1) (2026-06-15)
 

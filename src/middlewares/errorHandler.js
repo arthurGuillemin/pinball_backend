@@ -1,13 +1,8 @@
 import logger from '../utils/logger.js';
+import { isOperationalError } from '../utils/appError.js';
 
 /**
  * errorHandler — middleware Express de gestion centralisée des erreurs.
- * Doit être enregistré en dernier dans la chaîne de middlewares.
- *
- * 3 cas traités :
- *  1. Erreur de validation Zod → 400
- *  2. Erreur applicative AppError (avec statusCode) → statusCode
- *  3. Erreur inattendue → 500 (loggée en error pour investigation)
  */
 const errorHandler = (err, req, res, next) => {
   // Erreur de validation Zod
@@ -26,16 +21,13 @@ const errorHandler = (err, req, res, next) => {
     });
   }
 
-  // Erreur applicative intentionnelle (AppError)
-  if (err.statusCode) {
-    logger.warn({ message: err.message }, 'App error');
-    return res.status(err.statusCode).json({
-      status: 'fail',
-      message: err.message,
-    });
+  // Erreur applicative opérationnelle (AppError, NotFoundError, etc.)
+  if (isOperationalError(err)) {
+    logger.warn({ err }, 'App error');
+    return res.status(err.statusCode).json(err.toJSON());
   }
 
-  // Erreur inattendue — loggée pour investigation
+  // Erreur inattendue — loggée en error car potentiellement un vrai bug
   logger.error({ err }, 'Unhandled error');
   return res.status(500).json({
     status: 'error',

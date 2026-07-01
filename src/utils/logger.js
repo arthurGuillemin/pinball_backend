@@ -24,29 +24,42 @@ function createBaseLogger(level = 'info') {
   });
 }
 
+function normalizeArgs(a, b) {
+  if (typeof a === 'string') {
+    return { properties: {}, message: a };
+  }
+  const properties = a ?? {};
+  const message = typeof b === 'string' ? b : JSON.stringify(properties);
+  return { properties, message };
+}
+
 function applyAppInsightsTransport(baseLogger, client) {
   const isReady = () => Boolean(client?.config);
 
-  const safeTrace = (message, severity, properties = {}) => {
+  const safeTrace = (a, b, severity) => {
+    const { properties, message } = normalizeArgs(a, b);
     if (isReady()) {
-      client.trackTrace({ message: String(message), severity, properties });
+      client.trackTrace({ message, severity, properties });
     } else {
       console.log(`[AppInsights fallback] ${message}`, properties);
     }
   };
 
-  const safeException = (error, properties = {}) => {
-    const exception = error instanceof Error ? error : new Error(String(error));
+  const safeException = (a, b) => {
+    const { properties, message } = normalizeArgs(a, b);
+    const error =
+      properties?.err instanceof Error ? properties.err : new Error(message);
+
     if (isReady()) {
-      client.trackException({ exception, properties });
+      client.trackException({ exception: error, properties });
     } else {
-      console.error('[AppInsights fallback]', exception);
+      console.error('[AppInsights fallback]', error);
     }
   };
 
-  baseLogger.info = (message, properties) => safeTrace(message, 1, properties);
-  baseLogger.warn = (message, properties) => safeTrace(message, 2, properties);
-  baseLogger.error = (error, properties) => safeException(error, properties);
+  baseLogger.info = (a, b) => safeTrace(a, b, 1);
+  baseLogger.warn = (a, b) => safeTrace(a, b, 2);
+  baseLogger.error = (a, b) => safeException(a, b);
 
   return baseLogger;
 }
