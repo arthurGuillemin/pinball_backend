@@ -1,16 +1,23 @@
 import gameState from '../../game/state.js';
 
+export const REAL_SENSOR_IDS = [
+  'SENSOR_lane_right_1',
+  'SENSOR_lane_right_2',
+  'SENSOR_lane_left_1',
+  'SENSOR_lane_left_2',
+  'SENSOR_lane_rampe',
+  'SENSOR_lane_cave',
+  'SENSOR_lane_up_right',
+];
+
 /**
- * Helper shared entre tous les suites de tests
+ * Helper partagé entre tous les suites de tests.
  * Remet le singleton GameState dans son état initial avant chaque test
  */
 export function resetGameState() {
   gameState.reset();
 }
 
-/**
- * Démarre une partie avec des valeurs par défaut pour les tests.
- */
 export function startDefaultGame(
   playerName = 'TestPlayer',
   avatar = 'cuphead'
@@ -18,20 +25,12 @@ export function startDefaultGame(
   return gameState.startGame(playerName, avatar);
 }
 
-/**
- * Joue une partie jusqu'au game over (perd les 3 balles).
- */
 export function playUntilGameOver() {
   gameState.losesBall();
   gameState.losesBall();
   gameState.losesBall();
 }
 
-/**
- * Active tous les capteurs pour déclencher le bonus.
- */
 export function activateAllSensors() {
-  ['s1', 's2', 's3', 's4', 's5', 's6', 's7'].forEach((s) =>
-    gameState.registerLightSensor(s)
-  );
+  REAL_SENSOR_IDS.forEach((s) => gameState.registerLightSensor(s));
 }

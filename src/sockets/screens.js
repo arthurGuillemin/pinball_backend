@@ -5,16 +5,11 @@ import * as scoreService from '../services/score.service.js';
 
 /**
  * ScreensWebSocketServer — gère les connexions WebSocket des écrans (playfield, backglass, dmd).
- *
- * Responsabilités :
- *  - Accepter les connexions WS sur /screens
- *  - Router les messages entrants vers les handlers métier
- *  - Broadcaster les mises à jour d'état à tous les écrans connectés
- *
- * Pattern : map statique MESSAGE_TYPES → handlers pour éviter les switch/case.
- * WS_EVENTS sépare explicitement les événements sortants des types entrants.
+
  */
 class ScreensWebSocketServer {
+  static MAX_PAYLOAD_BYTES = 4 * 1024;
+
   // Types de messages reçus depuis les écrans
   static MESSAGE_TYPES = {
     START_GAME: 'start_game',
@@ -32,7 +27,10 @@ class ScreensWebSocketServer {
   };
 
   constructor() {
-    this.wss = new WebSocketServer({ noServer: true });
+    this.wss = new WebSocketServer({
+      noServer: true,
+      maxPayload: ScreensWebSocketServer.MAX_PAYLOAD_BYTES,
+    });
     this.messageHandlers = this.#buildMessageHandlers();
     this.#setupConnection();
   }
@@ -60,70 +58,89 @@ class ScreensWebSocketServer {
     try {
       const state = gameState.startGame(data.playerName, data.avatar);
       logger.info(
-        `[GAME] Nouvelle partie — joueur: ${data.playerName}, avatar: ${data.avatar}`
+        { playerName: data.playerName, avatar: data.avatar },
+        '[GAME] Nouvelle partie'
       );
       this.#broadcast(ScreensWebSocketServer.WS_EVENTS.STATE_UPDATE, state);
     } catch (err) {
-      logger.error('[GAME] startGame error :', err.message);
+      logger.warn({ err }, '[GAME] startGame impossible');
     }
   }
 
   #handleBumperHit() {
-    const state = gameState.registerBumperHit();
-    logger.info(`[GAME] Bumper hit — score: ${state.score}`);
-    this.#broadcast(ScreensWebSocketServer.WS_EVENTS.STATE_UPDATE, state);
+    try {
+      const state = gameState.registerBumperHit();
+      logger.info({ score: state.score }, '[GAME] Bumper hit');
+      this.#broadcast(ScreensWebSocketServer.WS_EVENTS.STATE_UPDATE, state);
+    } catch (err) {
+      logger.warn({ err }, '[GAME] handleBumperHit impossible');
+    }
   }
 
   #handleSlingshotHit() {
-    const state = gameState.registerSlingshotHit();
-    logger.info(`[GAME] Slingshot hit — score: ${state.score}`);
-    this.#broadcast(ScreensWebSocketServer.WS_EVENTS.STATE_UPDATE, state);
+    try {
+      const state = gameState.registerSlingshotHit();
+      logger.info({ score: state.score }, '[GAME] Slingshot hit');
+      this.#broadcast(ScreensWebSocketServer.WS_EVENTS.STATE_UPDATE, state);
+    } catch (err) {
+      logger.warn({ err }, '[GAME] handleSlingshotHit impossible');
+    }
   }
 
   #handleLightSensor(data) {
-    const state = gameState.registerLightSensor(data.sensorId);
-    logger.info(
-      `[GAME] Capteur activé: ${data.sensorId} — score: ${state.score}`
-    );
-    this.#broadcast(ScreensWebSocketServer.WS_EVENTS.STATE_UPDATE, state);
+    try {
+      const state = gameState.registerLightSensor(data.sensorId);
+      logger.info(
+        { sensorId: data.sensorId, score: state.score },
+        '[GAME] Capteur activé'
+      );
+      this.#broadcast(ScreensWebSocketServer.WS_EVENTS.STATE_UPDATE, state);
+    } catch (err) {
+      logger.warn({ err }, '[GAME] handleLightSensor impossible');
+    }
   }
 
   #handleCardsDown() {
-    const state = gameState.registerAllCardsDown();
-    logger.info(`[GAME] Toutes les cartes retournées — score: ${state.score}`);
-    this.#broadcast(ScreensWebSocketServer.WS_EVENTS.STATE_UPDATE, state);
+    try {
+      const state = gameState.registerAllCardsDown();
+      logger.info(
+        { score: state.score },
+        '[GAME] Toutes les cartes retournées'
+      );
+      this.#broadcast(ScreensWebSocketServer.WS_EVENTS.STATE_UPDATE, state);
+    } catch (err) {
+      logger.warn({ err }, '[GAME] handleCardsDown impossible');
+    }
   }
 
-  /**
-   * Gère la perte d'une balle.
-   * Si c'était la dernière balle, sauvegarde le score et broadcast GAME_OVER.
-   * Sinon broadcast STATE_UPDATE uniquement — pas de double message au client.
-   */
   async #handleBallLost() {
-    const state = gameState.losesBall();
-    logger.info(`[GAME] Balle perdue — restantes: ${state.balls}`);
+    try {
+      const state = gameState.losesBall();
+      logger.info({ remaining: state.balls }, '[GAME] Balle perdue');
 
-    if (gameState.isGameOver()) {
-      logger.info(
-        `[GAME] Game Over — joueur: ${state.currentPlayer}, score: ${state.score}`
-      );
-
-      try {
-        await scoreService.addNewScore(
-          state.currentPlayer,
-          state.score,
-          state.avatar
+      if (gameState.isGameOver()) {
+        logger.info(
+          { player: state.currentPlayer, score: state.score },
+          '[GAME] Game Over'
         );
-        logger.info('[GAME] Score sauvegardé en base');
-      } catch (err) {
-        // La sauvegarde échoue silencieusement côté BDD
-        // mais le game over est quand même notifié aux écrans
-        logger.error('[GAME] Erreur sauvegarde score :', err.message);
-      }
 
-      this.#broadcast(ScreensWebSocketServer.WS_EVENTS.GAME_OVER, state);
-    } else {
-      this.#broadcast(ScreensWebSocketServer.WS_EVENTS.STATE_UPDATE, state);
+        try {
+          await scoreService.addNewScore(
+            state.currentPlayer,
+            state.score,
+            state.avatar
+          );
+          logger.info('[GAME] Score sauvegardé en base');
+        } catch (err) {
+          logger.error({ err }, '[GAME] Erreur sauvegarde score');
+        }
+
+        this.#broadcast(ScreensWebSocketServer.WS_EVENTS.GAME_OVER, state);
+      } else {
+        this.#broadcast(ScreensWebSocketServer.WS_EVENTS.STATE_UPDATE, state);
+      }
+    } catch (err) {
+      logger.warn({ err }, '[GAME] handleBallLost impossible');
     }
   }
 
@@ -142,7 +159,6 @@ class ScreensWebSocketServer {
 
   #setupConnection() {
     this.wss.on('connection', (ws) => {
-      // Envoie l'état courant au client qui vient de se connecter
       this.#send(
         ws,
         ScreensWebSocketServer.WS_EVENTS.STATE_UPDATE,
@@ -160,13 +176,16 @@ class ScreensWebSocketServer {
 
           const handler = this.messageHandlers[data.type];
           if (!handler) {
-            logger.warn(`[Screens] Type de message inconnu : ${data.type}`);
+            logger.warn(
+              { type: data.type },
+              '[Screens] Type de message inconnu'
+            );
             return;
           }
 
           handler(data);
         } catch (err) {
-          logger.error('[Screens] Erreur traitement message :', err.message);
+          logger.error({ err }, '[Screens] Erreur traitement message');
         }
       });
 
@@ -175,7 +194,7 @@ class ScreensWebSocketServer {
       });
 
       ws.on('error', (err) => {
-        logger.error('[Screens] Erreur WS :', err.message);
+        logger.error({ err }, '[Screens] Erreur WS');
       });
     });
   }

@@ -12,6 +12,7 @@ import logger from './utils/logger.js';
 import env from './config/env.js';
 import gameState from './game/state.js';
 import screensWssServer, { wss as screensClients } from './sockets/screens.js';
+import { NotFoundError } from './utils/appError.js';
 
 process.on('uncaughtException', (err) => {
   logger.error({ err }, 'uncaughtException');
@@ -25,6 +26,7 @@ process.on('unhandledRejection', (reason) => {
 
 const app = express();
 const httpServer = createServer(app);
+app.set('trust proxy', 1);
 
 app.use(helmetMiddleware);
 
@@ -47,6 +49,10 @@ if (process.env.NODE_ENV === 'e2e') {
 }
 
 setupWebSockets(httpServer);
+
+app.use((req, res, next) => {
+  next(new NotFoundError(`Route ${req.method} ${req.originalUrl} introuvable`));
+});
 
 app.use(errorHandler);
 

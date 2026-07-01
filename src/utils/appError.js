@@ -11,10 +11,14 @@ const HTTP_STATUS = {
 export class AppError extends Error {
   /**
    * @param {string} message
-   * @param {number} statusCode
+   * @param {number} [statusCode=500]
    * @param {{ cause?: Error, details?: Record<string, unknown> }} [options]
    */
-  constructor(message, statusCode, { cause, details } = {}) {
+  constructor(
+    message,
+    statusCode = HTTP_STATUS.INTERNAL,
+    { cause, details } = {}
+  ) {
     super(message, { cause });
     this.name = this.constructor.name;
     this.statusCode = statusCode;

@@ -4,7 +4,6 @@ import { app } from '../../index.js';
 
 /**
  * Tests d'intégration — route HTTP /api/scores
-
  */
 
 vi.mock('../../config/db.js', () => ({
@@ -41,7 +40,7 @@ describe('GET /api/scores/leaderboard', () => {
     expect(Array.isArray(res.body.data)).toBe(true);
   });
 
-  it('retourne les bons champs sur chaque sores', async () => {
+  it('retourne les bons champs sur chaque score', async () => {
     const res = await request(app).get('/api/scores/leaderboard');
     const score = res.body.data[0];
     expect(score).toHaveProperty('player_name');
@@ -49,13 +48,13 @@ describe('GET /api/scores/leaderboard', () => {
     expect(score).toHaveProperty('avatar');
   });
 
-  it('retourne les scores dans le ordre decr', async () => {
+  it('retourne les scores dans le bon ordre décroissant', async () => {
     const res = await request(app).get('/api/scores/leaderboard');
     const scores = res.body.data.map((s) => s.score);
     expect(scores[0]).toBeGreaterThanOrEqual(scores[1]);
   });
 
-  it('retourne 500 si supabase fail', async () => {
+  it('retourne 500 avec status "error" si supabase fail', async () => {
     const { default: supabase } = await import('../../config/db.js');
     supabase.from.mockReturnValueOnce({
       select: () => ({
@@ -70,7 +69,12 @@ describe('GET /api/scores/leaderboard', () => {
 
     const res = await request(app).get('/api/scores/leaderboard');
     expect(res.status).toBe(500);
-    expect(res.body.status).toBe('fail');
+    // AppError(message, 500) → this.status = 'error' car statusCode >= 500
+    // (convention JSend : 'fail' = erreur client 4xx, 'error' = erreur serveur 5xx)
+    // errorHandler délègue maintenant à err.toJSON() au lieu de hardcoder 'fail',
+    // ce qui rend ce comportement cohérent avec le catch-all 'Unhandled error'
+    expect(res.body.status).toBe('error');
+    expect(res.body.message).toBe('DB connection failed');
   });
 });
 
@@ -79,5 +83,13 @@ describe('GET /', () => {
     const res = await request(app).get('/');
     expect(res.status).toBe(200);
     expect(res.body).toHaveProperty('status');
+  });
+});
+
+describe('Route inconnue', () => {
+  it('retourne 404 avec status "fail" sur une route inexistante', async () => {
+    const res = await request(app).get('/api/inexistant');
+    expect(res.status).toBe(404);
+    expect(res.body.status).toBe('fail');
   });
 });

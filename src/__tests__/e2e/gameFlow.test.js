@@ -150,8 +150,24 @@ describe('E2E — start_game', () => {
 
     await closeAndWait(ws);
   });
+
+  it('playerName trop long (> 20 caractères) est rejeté sans broadcast', async () => {
+    await resetServerState();
+    const ws = await connectClient();
+    await waitForMessage(ws); // state initial
+
+    const tooLong = 'A'.repeat(21);
+    send(ws, 'start_game', { playerName: tooLong, avatar: 'cuphead' });
+
+    // GameState.startGame throw → #handleStartGame catch et log un warn,
+    // aucun state_update n'est broadcasté
+    await expect(waitForMessage(ws, 400)).rejects.toThrow('timeout');
+
+    await closeAndWait(ws);
+  });
 });
-//═════════════════════════════════════════
+
+// ═══════════════════════════════════════════════════════════════════════════
 // GAMEPLAY
 // ═══════════════════════════════════════════════════════════════════════════
 
@@ -187,14 +203,27 @@ describe('E2E — gameplay', () => {
     send(ws, 'start_game', { playerName: 'Arthur' });
     await waitForMessage(ws);
 
-    send(ws, 'light_sensor', { sensorId: 's1' });
+    send(ws, 'light_sensor', { sensorId: 'SENSOR_lane_right_1' });
     const msg = await waitForMessage(ws);
     expect(msg.state.score).toBe(200);
-    expect(msg.state.lightsActivated).toContain('s1');
+    expect(msg.state.lightsActivated).toContain('SENSOR_lane_right_1');
     await closeAndWait(ws);
   });
 
-  it('cards_down incr le score de 4000', async () => {
+  it('light_sensor avec un sensorId inconnu est rejeté sans broadcast', async () => {
+    await resetServerState();
+    const ws = await connectClient();
+    await waitForMessage(ws);
+    send(ws, 'start_game', { playerName: 'Arthur' });
+    await waitForMessage(ws);
+
+    send(ws, 'light_sensor', { sensorId: 'sensr_bidon' });
+    await expect(waitForMessage(ws, 400)).rejects.toThrow('timeout');
+
+    await closeAndWait(ws);
+  });
+
+  it('cards_down incrémente le score de 4000', async () => {
     await resetServerState();
     const ws = await connectClient();
     await waitForMessage(ws);
@@ -267,5 +296,46 @@ describe('E2E — messages invalides', () => {
     ws.send('not json {{{{');
     await expect(waitForMessage(ws, 400)).rejects.toThrow('timeout');
     await closeAndWait(ws);
+  });
+
+  it('un message dépassant maxPayload (4 Ko) ne casse pas le serveur', async () => {
+    await resetServerState();
+    const ws = await connectClient();
+    await waitForMessage(ws);
+
+    const oversized = JSON.stringify({
+      type: 'bumper_hit',
+      junk: 'x'.repeat(5000),
+    });
+
+    const outcome = new Promise((resolve) => {
+      ws.once('close', () => resolve('closed'));
+      ws.once('error', () => resolve('errored'));
+      setTimeout(() => resolve('timeout'), 1000);
+    });
+
+    ws.send(oversized);
+    const result = await outcome;
+    expect(['closed', 'errored']).toContain(result);
+
+    const ws2 = await connectClient();
+    const msg = await waitForMessage(ws2);
+    expect(msg.type).toBe('state_update');
+    await closeAndWait(ws2);
+  });
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// ROUTES HTTP — 404 catch-all
+// ═══════════════════════════════════════════════════════════════════════════
+
+describe('E2E — routes HTTP inconnues', () => {
+  it('retourne 404 JSON cohérent sur une route inexistante', async () => {
+    const res = await fetch(`http://127.0.0.1:${PORT}/api/inexistant`);
+    const body = await res.json();
+
+    expect(res.status).toBe(404);
+    expect(body.status).toBe('fail');
+    expect(body.message).toContain('introuvable');
   });
 });

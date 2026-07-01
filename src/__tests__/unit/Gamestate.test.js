@@ -11,8 +11,8 @@ beforeEach(() => {
   resetGameState();
 });
 
-// ═════════════════════════════════════════════════════════════════════
-//  INITIAL STATE
+// ═══════════════════════════════════════════════════════════════════════════
+// ÉTAT INITIAL
 // ═══════════════════════════════════════════════════════════════════════════
 
 describe('GameState — état initial', () => {
@@ -41,12 +41,12 @@ describe('GameState — état initial', () => {
   });
 });
 
-// ═════════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════════════
 // startGame
 // ═══════════════════════════════════════════════════════════════════════════
 
 describe('GameState — startGame', () => {
-  it('start une partie avec le bon joueur', () => {
+  it('démarre une partie avec le bon joueur', () => {
     const state = gameState.startGame('Arthur');
     expect(state.isRunning).toBe(true);
     expect(state.currentPlayer).toBe('Arthur');
@@ -62,8 +62,13 @@ describe('GameState — startGame', () => {
     expect(state.avatar).toBe('mugman');
   });
 
+  it('accepte chalice comme avatar', () => {
+    const state = gameState.startGame('Arthur', 'chalice');
+    expect(state.avatar).toBe('chalice');
+  });
+
   it('fallback sur cuphead si avatar invalide', () => {
-    const state = gameState.startGame('Arthur', 'brontis');
+    const state = gameState.startGame('Arthur', 'pikachu');
     expect(state.avatar).toBe('cuphead');
   });
 
@@ -71,7 +76,7 @@ describe('GameState — startGame', () => {
     startDefaultGame();
     gameState.registerBumperHit();
     gameState.reset();
-    const state = gameState.startGame('brontis');
+    const state = gameState.startGame('Bob');
     expect(state.score).toBe(0);
   });
 
@@ -93,6 +98,8 @@ describe('GameState — startGame', () => {
 
   it('lance une erreur si une partie est déjà en cours', () => {
     gameState.startGame('Arthur');
+    // On vérifie que l'erreur contient le message métier
+    // Le préfixe [GameState] est un détail d'implémentation
     expect(() => gameState.startGame('Bob')).toThrow(
       'une partie est déjà en cours'
     );
@@ -112,8 +119,8 @@ describe('GameState — startGame', () => {
   });
 });
 
-// ═════════════════════════════════════════════════════════════════════
-// GUARDS — impossible de faire si la partie n'est pas lancé"
+// ═══════════════════════════════════════════════════════════════════════════
+// GUARDS — impossible d'agir sans partie en cours
 // ═══════════════════════════════════════════════════════════════════════════
 
 describe('GameState — guards', () => {
@@ -136,7 +143,7 @@ describe('GameState — guards', () => {
   });
 
   it('registerLightSensor throw si pas de partie', () => {
-    expect(() => gameState.registerLightSensor('s1')).toThrow(
+    expect(() => gameState.registerLightSensor('SENSOR_lane_right_1')).toThrow(
       'aucune partie en cours'
     );
   });
@@ -146,7 +153,7 @@ describe('GameState — guards', () => {
   });
 });
 
-// ═════════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════════════
 // POINTS
 // ═══════════════════════════════════════════════════════════════════════════
 
@@ -180,8 +187,8 @@ describe('GameState — points', () => {
   });
 });
 
-// ═════════════════════════════════════════════════════════════════════
-// SENSORS LIGHT
+// ═══════════════════════════════════════════════════════════════════════════
+// CAPTEURS LUMINEUX
 // ═══════════════════════════════════════════════════════════════════════════
 
 describe('GameState — registerLightSensor', () => {
@@ -190,21 +197,29 @@ describe('GameState — registerLightSensor', () => {
   });
 
   it('ajoute 200 points par capteur', () => {
-    expect(gameState.registerLightSensor('s1').score).toBe(200);
+    expect(gameState.registerLightSensor('SENSOR_lane_right_1').score).toBe(
+      200
+    );
   });
 
   it('enregistre le capteur dans lightsActivated', () => {
-    expect(gameState.registerLightSensor('s1').lightsActivated).toContain('s1');
+    expect(
+      gameState.registerLightSensor('SENSOR_lane_right_1').lightsActivated
+    ).toContain('SENSOR_lane_right_1');
   });
 
-  it('ajoute pas deux fois le même capteur', () => {
-    gameState.registerLightSensor('s1');
-    expect(gameState.registerLightSensor('s1').lightsActivated.length).toBe(1);
+  it("n'ajoute pas deux fois le même capteur", () => {
+    gameState.registerLightSensor('SENSOR_lane_right_1');
+    expect(
+      gameState.registerLightSensor('SENSOR_lane_right_1').lightsActivated
+        .length
+    ).toBe(1);
   });
 
-  it(' bonus et reset quand tous les capteurs sont activés', () => {
+  it('accorde un bonus et reset quand tous les capteurs sont activés', () => {
     activateAllSensors();
     const state = gameState.getState();
+    // 7 × 200 + 1000 bonus = 2400
     expect(state.score).toBe(2400);
     expect(state.lightsActivated).toEqual([]);
   });
@@ -215,7 +230,7 @@ describe('GameState — registerLightSensor', () => {
     );
   });
 
-  it('throw si sensorId est vide', () => {
+  it('throw si sensorId est une chaîne vide', () => {
     expect(() => gameState.registerLightSensor('')).toThrow(
       'sensorId est requis'
     );
@@ -228,7 +243,7 @@ describe('GameState — registerLightSensor', () => {
   });
 });
 
-// ═════════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════════════
 // PERTE DE BALLE
 // ═══════════════════════════════════════════════════════════════════════════
 
@@ -246,7 +261,7 @@ describe('GameState — losesBall', () => {
   });
 
   it('reset lightsActivated à chaque perte de balle', () => {
-    gameState.registerLightSensor('s1');
+    gameState.registerLightSensor('SENSOR_lane_right_1');
     expect(gameState.losesBall().lightsActivated).toEqual([]);
   });
 
@@ -317,7 +332,7 @@ describe('GameState — immutabilité', () => {
 
   it('modifier lightsActivated retourné ne mute pas le state interne', () => {
     startDefaultGame();
-    gameState.registerLightSensor('s1');
+    gameState.registerLightSensor('SENSOR_lane_right_1');
     const state = gameState.getState();
     state.lightsActivated.push('injected');
     expect(gameState.getState().lightsActivated).not.toContain('injected');
@@ -334,11 +349,11 @@ describe('GameState — scénario complet', () => {
     expect(state.isRunning).toBe(true);
     expect(state.balls).toBe(3);
 
-    gameState.registerBumperHit();
-    gameState.registerBumperHit();
-    gameState.registerSlingshotHit();
+    gameState.registerBumperHit(); // 100
+    gameState.registerBumperHit(); // 200
+    gameState.registerSlingshotHit(); // 250
 
-    activateAllSensors();
+    activateAllSensors(); // 250 + 2400 = 2650
 
     state = gameState.losesBall();
     expect(state.balls).toBe(2);

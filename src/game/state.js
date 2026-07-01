@@ -1,5 +1,8 @@
+import { ConflictError, ValidationError } from '../utils/appError.js';
+
 const INITIAL_BALLS = 3;
 const TOTAL_LIGHT_SENSORS = 7;
+const MAX_PLAYER_NAME_LENGTH = 20;
 
 const POINTS_CONFIG = {
   BUMPER: 100,
@@ -11,13 +14,18 @@ const POINTS_CONFIG = {
 
 const VALID_AVATARS = ['cuphead', 'mugman', 'chalice'];
 
+const VALID_SENSOR_IDS = [
+  'SENSOR_lane_right_1',
+  'SENSOR_lane_right_2',
+  'SENSOR_lane_left_1',
+  'SENSOR_lane_left_2',
+  'SENSOR_lane_rampe',
+  'SENSOR_lane_cave',
+  'SENSOR_lane_up_right',
+];
+
 /**
- * GameState — singleton qui représente l'état d'une partie en cours.
- *
- * Toutes les méthodes de mutation vérifient que la partie est en cours
- * via #assertRunning — aucun effet de bord silencieux possible.
- * Le state n'est jamais muté directement : chaque modification construit
- * un nouvel objet (pattern immutable avec spread + new Set).
+ * GameState — singleton qui représente le state e la partie en cours
  */
 class GameState {
   #state;
@@ -41,12 +49,6 @@ class GameState {
 
   // ── Lecture ─────────────────────────────────────────────────────────────────
 
-  /**
-   * Retourne une deep copy sérialisable du state.
-   * structuredClone garantit qu'aucune référence externe ne peut muter #state.
-   * lightsActivated est converti en Array car JSON.stringify ne sait pas
-   * sérialiser un Set (retournerait {}).
-   */
   getState() {
     const copy = structuredClone(this.#state);
     copy.lightsActivated = Array.from(this.#state.lightsActivated);
@@ -59,14 +61,9 @@ class GameState {
 
   // ── Guard interne ───────────────────────────────────────────────────────────
 
-  /**
-   * Lève une erreur si aucune partie n'est en cours.
-   * Utilisé par toutes les méthodes de mutation pour fail-fast
-   * plutôt que de retourner silencieusement l'état courant.
-   */
   #assertRunning(context = 'action') {
     if (!this.#state.isRunning) {
-      throw new Error(
+      throw new ConflictError(
         `[GameState] ${context} impossible : aucune partie en cours`
       );
     }
@@ -75,20 +72,24 @@ class GameState {
   // ── Cycle de vie ────────────────────────────────────────────────────────────
 
   /**
-   * Démarre une nouvelle partie.
    * @throws {Error} si une partie est déjà en cours
-   * @throws {Error} si playerName est vide
+   * @throws {Error} si playerName est vide ou trop long
    */
   startGame(playerName = 'UnknownPlayer', avatar = 'cuphead') {
     if (this.#state.isRunning) {
-      throw new Error(
+      throw new ConflictError(
         '[GameState] startGame impossible : une partie est déjà en cours'
       );
     }
 
     const cleanName = playerName?.trim();
     if (!cleanName) {
-      throw new Error('[GameState] playerName est requis');
+      throw new ValidationError('[GameState] playerName est requis');
+    }
+    if (cleanName.length > MAX_PLAYER_NAME_LENGTH) {
+      throw new ValidationError(
+        `[GameState] playerName trop long (max ${MAX_PLAYER_NAME_LENGTH} caractères)`
+      );
     }
 
     const cleanAvatar = VALID_AVATARS.includes(avatar) ? avatar : 'cuphead';
@@ -118,7 +119,7 @@ class GameState {
     this.#assertRunning('addPoints');
 
     if (typeof points !== 'number' || points < 0) {
-      throw new Error(
+      throw new ValidationError(
         '[GameState] Points invalides : doit être un nombre positif'
       );
     }
@@ -145,22 +146,17 @@ class GameState {
     return this.#addPoints(POINTS_CONFIG.CARDSDOWN);
   }
 
-  /**
-   * Enregistre l'activation d'un capteur lumineux.
-   * Quand tous les capteurs sont activés, accorde un bonus et reset le Set.
-   * @throws {Error} si la partie n'est pas en cours
-   * @throws {Error} si sensorId est absent ou vide
-   */
   registerLightSensor(sensorId) {
     this.#assertRunning('registerLightSensor');
-
     if (!sensorId) {
-      throw new Error('[GameState] sensorId est requis');
+      throw new ValidationError('[GameState] sensorId est requis');
+    }
+    if (!VALID_SENSOR_IDS.includes(sensorId)) {
+      throw new ValidationError(`[GameState] sensorId inconnu : ${sensorId}`);
     }
 
     const newLights = new Set(this.#state.lightsActivated);
     newLights.add(sensorId);
-
     let points = POINTS_CONFIG.LIGHT_SENSOR;
 
     if (newLights.size === TOTAL_LIGHT_SENSORS) {
@@ -173,7 +169,6 @@ class GameState {
   }
 
   /**
-   * Perd une balle. Met isRunning à false si c'était la dernière.
    * @throws {Error} si la partie n'est pas en cours
    */
   losesBall() {
