@@ -1,10 +1,9 @@
 ## [1.10.3](https://github.com/arthurGuillemin/pinball_backend/compare/v1.10.2...v1.10.3) (2026-07-01)
 
-
 ### Bug Fixes
 
-* **backend:** remove wrong test that crash in ci ([7539b9a](https://github.com/arthurGuillemin/pinball_backend/commit/7539b9ad2aacffd63fd6c9a3a61b1d3197f5a19d))
-* **backend:** sync sensors, fix double-count, harden errors and logger transport ([7cce0f0](https://github.com/arthurGuillemin/pinball_backend/commit/7cce0f03c2c644e7b015b6c2f3ecde9e4ef7f516))
+- **backend:** remove wrong test that crash in ci ([7539b9a](https://github.com/arthurGuillemin/pinball_backend/commit/7539b9ad2aacffd63fd6c9a3a61b1d3197f5a19d))
+- **backend:** sync sensors, fix double-count, harden errors and logger transport ([7cce0f0](https://github.com/arthurGuillemin/pinball_backend/commit/7cce0f03c2c644e7b015b6c2f3ecde9e4ef7f516))
 
 ## [1.10.2](https://github.com/arthurGuillemin/pinball_backend/compare/v1.10.1...v1.10.2) (2026-06-19)
 

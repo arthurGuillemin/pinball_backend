@@ -84,7 +84,6 @@ jobs:
     #                   → les vars d'env sensibles sont injectées via le .env sur le cabinet
     #                      (pas en build-arg : le backend les lit au runtime, pas au build)
     needs: release
-    if: needs.release.outputs.new_release_published == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -145,7 +144,6 @@ jobs:
     # Déploie sur Azure App Service — utilisé par les devs front
     # pour tester sans lancer le backend en local.
     needs: [release, build-and-push]
-    if: needs.release.outputs.new_release_published == 'true'
     runs-on: ubuntu-latest
     environment: production
     concurrency:
@@ -168,7 +166,6 @@ jobs:
 
   notify-team:
     needs: [release, build-and-push, deploy-azure]
-    if: always() && needs.release.outputs.new_release_published == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Notify success
