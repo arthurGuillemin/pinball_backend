@@ -1,3 +1,10 @@
+# [1.14.0](https://github.com/arthurGuillemin/pinball_backend/compare/v1.13.0...v1.14.0) (2026-07-02)
+
+
+### Features
+
+* **gitignore:** add changelog & mosuitto to ignore ([bbb37e0](https://github.com/arthurGuillemin/pinball_backend/commit/bbb37e01f613e8caae30ba3cae4b82ebb0d90781))
+
 # [1.13.0](https://github.com/arthurGuillemin/pinball_backend/compare/v1.12.0...v1.13.0) (2026-07-02)
 
 
