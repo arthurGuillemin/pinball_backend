@@ -1,10 +1,9 @@
 # [1.11.0](https://github.com/arthurGuillemin/pinball_backend/compare/v1.10.3...v1.11.0) (2026-07-02)
 
-
 ### Features
 
-* **ci:** add arm64 platform to docker build and keep azure deploy for dev team ([933230f](https://github.com/arthurGuillemin/pinball_backend/commit/933230f86b51c4630679379deb4f14df10427bbc))
-* **ci:** add arm64 platform to docker build and keep azure deploy for dev team ([4985f3c](https://github.com/arthurGuillemin/pinball_backend/commit/4985f3ca1d89db192f6e64d1231467706ffed5ba))
+- **ci:** add arm64 platform to docker build and keep azure deploy for dev team ([933230f](https://github.com/arthurGuillemin/pinball_backend/commit/933230f86b51c4630679379deb4f14df10427bbc))
+- **ci:** add arm64 platform to docker build and keep azure deploy for dev team ([4985f3c](https://github.com/arthurGuillemin/pinball_backend/commit/4985f3ca1d89db192f6e64d1231467706ffed5ba))
 
 ## [1.10.3](https://github.com/arthurGuillemin/pinball_backend/compare/v1.10.2...v1.10.3) (2026-07-01)
 
