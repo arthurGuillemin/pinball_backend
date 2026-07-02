@@ -1,4 +1,4 @@
-name: CD Production
+name: CD Production Backend
 
 on:
   push:
@@ -76,14 +76,23 @@ jobs:
           GIT_COMMITTER_NAME: 'github-actions[bot]'
           GIT_COMMITTER_EMAIL: 'github-actions[bot]@users.noreply.github.com'
 
-  build-and-scan:
+  build-and-push:
+    # Pousse l'image sur Docker Hub pour deux usages :
+    # 1. linux/amd64  → Azure App Service (déployé juste après dans le job deploy)
+    #                   → pratique pour les devs front qui veulent tester sans lancer le back en local
+    # 2. linux/arm64  → cabinet Fliphetic qui pull l'image au reload
+    #                   → les vars d'env sensibles sont injectées via le .env sur le cabinet
+    #                      (pas en build-arg : le backend les lit au runtime, pas au build)
     needs: release
+    if: needs.release.outputs.new_release_published == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           ref: main
           fetch-depth: 0
+
+      - uses: docker/setup-qemu-action@v3
 
       - uses: docker/setup-buildx-action@v3
 
@@ -103,11 +112,11 @@ jobs:
             type=semver,pattern={{major}}.{{minor}},value=v${{ needs.release.outputs.new_release_version }}
             type=raw,value=latest
 
-      - name: Build and Push Production
+      - name: Build and Push
         uses: docker/build-push-action@v5
         with:
           context: .
-          platforms: linux/amd64
+          platforms: linux/amd64,linux/arm64
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
@@ -127,13 +136,16 @@ jobs:
           output: trivy-results.sarif
 
       - name: Upload Trivy results to GitHub Security
-        if: steps.trivy.outputs.sarif_file != ''
+        if: always()
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: trivy-results.sarif
 
-  deploy:
-    needs: [release, build-and-scan]
+  deploy-azure:
+    # Déploie sur Azure App Service — utilisé par les devs front
+    # pour tester sans lancer le backend en local.
+    needs: [release, build-and-push]
+    if: needs.release.outputs.new_release_published == 'true'
     runs-on: ubuntu-latest
     environment: production
     concurrency:
@@ -148,31 +160,31 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Deploy to Azure Production
+      - name: Deploy to Azure
         uses: azure/webapps-deploy@v3
         with:
           app-name: flipper-backend-app
           images: arthurguill/pinball-backend:latest
 
-  notifyTeam7:
-    needs: [release, deploy]
-    if: always()
+  notify-team:
+    needs: [release, build-and-push, deploy-azure]
+    if: always() && needs.release.outputs.new_release_published == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Notify success
-        if: needs.deploy.result == 'success'
+        if: needs.deploy-azure.result == 'success'
         run: |
           curl -H "Content-Type: application/json" \
-            -d "{\"content\": \" **Backend : Nouvelle Release en prod v${{ needs.release.outputs.new_release_version }}**\n succes :  https://flipper-backend-app.azurewebsites.net\n Triggered by @${{ github.actor }}\"}" \
+            -d "{\"content\": \"✅ **Backend : Release v${{ needs.release.outputs.new_release_version }}**\nImage Docker pushée pour amd64 + arm64\nAzure : https://flipper-backend-app.azurewebsites.net\nTriggered by @${{ github.actor }}\"}" \
             ${{ secrets.DISCORD_WEBHOOK }}
 
       - name: Notify failure
-        if: needs.deploy.result == 'failure' || needs.build-and-scan.result == 'failure'
+        if: needs.build-and-push.result == 'failure' || needs.deploy-azure.result == 'failure'
         run: |
-          REASON="deployment"
-          if [ "${{ needs.build-and-scan.result }}" = "failure" ]; then
-            REASON="security scan (Trivy)"
+          REASON="Docker build"
+          if [ "${{ needs.deploy-azure.result }}" = "failure" ]; then
+            REASON="déploiement Azure"
           fi
           curl -H "Content-Type: application/json" \
-            -d "{\"content\": \" **Backend : Nouvelle Release en prod v${{ needs.release.outputs.new_release_version }} failes**\n at: ${REASON}\n Triggered by @${{ github.actor }}\n\nCheck logs: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\"}" \
+            -d "{\"content\": \"❌ **Backend : Release v${{ needs.release.outputs.new_release_version }} — Échec**\nErreur : ${REASON}\nTriggered by @${{ github.actor }}\nLogs: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\"}" \
             ${{ secrets.DISCORD_WEBHOOK }}
