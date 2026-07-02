@@ -172,7 +172,7 @@ jobs:
         if: needs.deploy-azure.result == 'success'
         run: |
           curl -H "Content-Type: application/json" \
-            -d "{\"content\": \"✅ **Backend : Release v${{ needs.release.outputs.new_release_version }}**\nImage Docker pushée pour amd64 + arm64\nAzure : https://flipper-backend-app.azurewebsites.net\nTriggered by @${{ github.actor }}\"}" \
+            -d "{\"content\": \"**Backend : Release v${{ needs.release.outputs.new_release_version }}**\nImage Docker pushée pour amd64 + arm64\nAzure : https://flipper-backend-app.azurewebsites.net\nTriggered by @${{ github.actor }}\"}" \
             ${{ secrets.DISCORD_WEBHOOK }}
 
       - name: Notify failure
@@ -183,5 +183,5 @@ jobs:
             REASON="déploiement Azure"
           fi
           curl -H "Content-Type: application/json" \
-            -d "{\"content\": \"❌ **Backend : Release v${{ needs.release.outputs.new_release_version }} — Échec**\nErreur : ${REASON}\nTriggered by @${{ github.actor }}\nLogs: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\"}" \
+            -d "{\"content\": \" **Backend : Release v${{ needs.release.outputs.new_release_version }} — Échec**\nErreur : ${REASON}\nTriggered by @${{ github.actor }}\nLogs: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\"}" \
             ${{ secrets.DISCORD_WEBHOOK }}
