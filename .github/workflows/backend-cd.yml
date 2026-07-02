@@ -83,7 +83,6 @@ jobs:
     # 2. linux/arm64  → cabinet Fliphetic qui pull l'image au reload
     #                   → les vars d'env sensibles sont injectées via le .env sur le cabinet
     #                      (pas en build-arg : le backend les lit au runtime, pas au build)
-    needs: release
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -136,7 +135,7 @@ jobs:
 
       - name: Upload Trivy results to GitHub Security
         if: always()
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: trivy-results.sarif
 
