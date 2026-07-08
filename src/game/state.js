@@ -46,7 +46,7 @@ class GameState {
     };
   }
 
-  // ── Lecture ─────────────────────────────────────────────────────────────────
+  //  Lecture ─────────────────────────────────────────────────────────────────
 
   getState() {
     return {
@@ -59,7 +59,7 @@ class GameState {
     return !this.#state.isRunning;
   }
 
-  // ── Guard interne ───────────────────────────────────────────────────────────
+  //  Guard interne ───────────────────────────────────────────────────────────
 
   #assertRunning(context = 'action') {
     if (!this.#state.isRunning) {
@@ -69,7 +69,7 @@ class GameState {
     }
   }
 
-  // ── Cycle de vie ────────────────────────────────────────────────────────────
+  //  Cycle de vie ────────────────────────────────────────────────────────────
 
   /**
    * @throws {Error} si une partie est déjà en cours
@@ -109,7 +109,7 @@ class GameState {
     return this.getState();
   }
 
-  // ── Points ──────────────────────────────────────────────────────────────────
+  //  Points ──────────────────────────────────────────────────────────────────
 
   /**
    * @throws {Error} si la partie n'est pas en cours
