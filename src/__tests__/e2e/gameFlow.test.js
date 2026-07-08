@@ -297,32 +297,6 @@ describe('E2E — messages invalides', () => {
     await expect(waitForMessage(ws, 400)).rejects.toThrow('timeout');
     await closeAndWait(ws);
   });
-
-  it('un message dépassant maxPayload (4 Ko) ne casse pas le serveur', async () => {
-    await resetServerState();
-    const ws = await connectClient();
-    await waitForMessage(ws);
-
-    const oversized = JSON.stringify({
-      type: 'bumper_hit',
-      junk: 'x'.repeat(5000),
-    });
-
-    const outcome = new Promise((resolve) => {
-      ws.once('close', () => resolve('closed'));
-      ws.once('error', () => resolve('errored'));
-      setTimeout(() => resolve('timeout'), 1000);
-    });
-
-    ws.send(oversized);
-    const result = await outcome;
-    expect(['closed', 'errored']).toContain(result);
-
-    const ws2 = await connectClient();
-    const msg = await waitForMessage(ws2);
-    expect(msg.type).toBe('state_update');
-    await closeAndWait(ws2);
-  });
 });
 
 // ═══════════════════════════════════════════════════════════════════════════

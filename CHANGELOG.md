@@ -1,3 +1,38 @@
+# [1.14.0](https://github.com/arthurGuillemin/pinball_backend/compare/v1.13.0...v1.14.0) (2026-07-02)
+
+
+### Features
+
+* **gitignore:** add changelog & mosuitto to ignore ([bbb37e0](https://github.com/arthurGuillemin/pinball_backend/commit/bbb37e01f613e8caae30ba3cae4b82ebb0d90781))
+
+# [1.13.0](https://github.com/arthurGuillemin/pinball_backend/compare/v1.12.0...v1.13.0) (2026-07-02)
+
+
+### Features
+
+* **ci:** add arm64 platform to docker build and keep azure deploy for dev team ([84488fc](https://github.com/arthurGuillemin/pinball_backend/commit/84488fc6cc994a0b6aa459a4800658feb43e7377))
+
+# [1.12.0](https://github.com/arthurGuillemin/pinball_backend/compare/v1.11.0...v1.12.0) (2026-07-02)
+
+
+### Features
+
+* **ci:** add arm64 platform to docker build and keep azure deploy for dev team ([e5acc37](https://github.com/arthurGuillemin/pinball_backend/commit/e5acc37cbdc1e7e3ebedf6ddd84538a9bdd1d872))
+
+# [1.11.0](https://github.com/arthurGuillemin/pinball_backend/compare/v1.10.3...v1.11.0) (2026-07-02)
+
+### Features
+
+- **ci:** add arm64 platform to docker build and keep azure deploy for dev team ([933230f](https://github.com/arthurGuillemin/pinball_backend/commit/933230f86b51c4630679379deb4f14df10427bbc))
+- **ci:** add arm64 platform to docker build and keep azure deploy for dev team ([4985f3c](https://github.com/arthurGuillemin/pinball_backend/commit/4985f3ca1d89db192f6e64d1231467706ffed5ba))
+
+## [1.10.3](https://github.com/arthurGuillemin/pinball_backend/compare/v1.10.2...v1.10.3) (2026-07-01)
+
+### Bug Fixes
+
+- **backend:** remove wrong test that crash in ci ([7539b9a](https://github.com/arthurGuillemin/pinball_backend/commit/7539b9ad2aacffd63fd6c9a3a61b1d3197f5a19d))
+- **backend:** sync sensors, fix double-count, harden errors and logger transport ([7cce0f0](https://github.com/arthurGuillemin/pinball_backend/commit/7cce0f03c2c644e7b015b6c2f3ecde9e4ef7f516))
+
 ## [1.10.2](https://github.com/arthurGuillemin/pinball_backend/compare/v1.10.1...v1.10.2) (2026-06-19)
 
 ### Bug Fixes
