@@ -8,12 +8,6 @@ Serveur Node.js centralisant la logique du flipper virtuel : API REST pour les s
 
 - **Node.js** avec ES Modules (`"type": "module"`)
 - **Express** — API REST
-- **Socket.io** — Communication temps réel
-- **Supabase** — Base de données PostgreSQL hébergée
-- **dotenv** — Gestion des variables d'environnement
-- **nodemon** — Rechargement automatique en développement
-
----
 
 ## Installation
 
@@ -33,8 +27,6 @@ SUPABASE_URL=https://xxxx.supabase.co
 SUPABASE_ANON_KEY=xxxx
 ```
 
-Les valeurs `SUPABASE_URL` et `SUPABASE_ANON_KEY` sont disponibles dans le dashboard Supabase sous **Settings > API**.
-
 ---
 
 ## Lancement
@@ -43,22 +35,8 @@ Les valeurs `SUPABASE_URL` et `SUPABASE_ANON_KEY` sont disponibles dans le dashb
 # Dev
 npm run dev
 
-# Prod
-npm start
 ```
 
----
-
-## Structure du projet
-
-```
-src/
-├── index.js          # Point d'entrée — serveur HTTP, Express, Socket.io
-├── config/
-│   └── db.js         # Init du client Supabase
-└── routes/
-    └── scores.js     # REST pour les scores
-```
 
 ---
 
@@ -66,7 +44,7 @@ src/
 
 ### `GET /api/scores`
 
-Retourne le top 10 des scores les plus élevés.
+Retourne le top 5 des scores les plus élevés.
 
 **Réponse**
 
@@ -75,27 +53,6 @@ Retourne le top 10 des scores les plus élevés.
   { "id": 1, "player_name": "Arthur", "score": 42000, "created_at": "..." },
   ...
 ]
-```
-
----
-
-### `POST /api/scores`
-
-Ajoute un nouveau score.
-
-**Body**
-
-```json
-{
-  "player_name": "Arthur",
-  "score": 42000
-}
-```
-
-**Réponse** `201`
-
-```json
-{ "id": 2, "player_name": "Arthur", "score": 42000, "created_at": "..." }
 ```
 
 ---
@@ -113,9 +70,6 @@ Table Supabase `scores` :
 
 ---
 
-## WebSockets (a venir)
-
-Deux namespaces Socket.io seront implémentés :
+## WebSockets 
 
 - `/screens` — Synchronisation entre Playfield, Backglass et DMD
-- `/controllers` — Réception des inputs depuis les ESP32 (flippers, start, nudge)
