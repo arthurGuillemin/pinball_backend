@@ -37,7 +37,6 @@ npm run dev
 
 ```
 
-
 ---
 
 ## API REST
@@ -70,6 +69,6 @@ Table Supabase `scores` :
 
 ---
 
-## WebSockets 
+## WebSockets
 
 - `/screens` — Synchronisation entre Playfield, Backglass et DMD
