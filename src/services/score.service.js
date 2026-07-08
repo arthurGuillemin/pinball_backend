@@ -4,7 +4,7 @@ import { AppError } from '../utils/appError.js';
 export const getLeaderboard = async () => {
   const { data, error } = await supabase
     .from('scores')
-    .select('*')
+    .select('player_name, score, avatar')
     .order('score', { ascending: false })
     .limit(5);
   if (error) throw new AppError(error.message, 500);

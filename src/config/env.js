@@ -3,6 +3,8 @@ import { z } from 'zod';
 import logger from '../utils/logger.js';
 import { AppError } from '../utils/appError.js';
 
+//Lecture et verification du .env
+
 dotenv.config({
   path: ['test', 'e2e'].includes(process.env.NODE_ENV) ? '.env.test' : '.env',
 });

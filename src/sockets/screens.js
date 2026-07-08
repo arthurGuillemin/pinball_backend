@@ -4,8 +4,7 @@ import logger from '../utils/logger.js';
 import * as scoreService from '../services/score.service.js';
 
 /**
- * ScreensWebSocketServer — gère les connexions WebSocket des écrans (playfield, backglass, dmd).
-
+ * ScreensWebSocketServer — gère les connexions WebSocket des écrans (playfield, backglass, dmd)
  */
 class ScreensWebSocketServer {
   static MAX_PAYLOAD_BYTES = 4 * 1024;
@@ -165,7 +164,7 @@ class ScreensWebSocketServer {
         gameState.getState()
       );
 
-      ws.on('message', (msg) => {
+      ws.on('message', async (msg) => {
         try {
           const data = JSON.parse(msg.toString());
 
@@ -183,7 +182,7 @@ class ScreensWebSocketServer {
             return;
           }
 
-          handler(data);
+          await handler(data);
         } catch (err) {
           logger.error({ err }, '[Screens] Erreur traitement message');
         }

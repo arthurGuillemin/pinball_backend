@@ -39,23 +39,8 @@ export class AppError extends Error {
   }
 }
 
-export class BadRequestError extends AppError {
-  constructor(message = 'Bad request', options) {
-    super(message, HTTP_STATUS.BAD_REQUEST, options);
-  }
-}
-
-export class UnauthorizedError extends AppError {
-  constructor(message = 'Unauthorized', options) {
-    super(message, HTTP_STATUS.UNAUTHORIZED, options);
-  }
-}
-
-export class ForbiddenError extends AppError {
-  constructor(message = 'Forbidden', options) {
-    super(message, HTTP_STATUS.FORBIDDEN, options);
-  }
-}
+export const isOperationalError = (err) =>
+  err instanceof AppError && err.isOperational;
 
 export class NotFoundError extends AppError {
   constructor(message = 'Resource not found', options) {
@@ -80,7 +65,3 @@ export class InternalError extends AppError {
     super(message, HTTP_STATUS.INTERNAL, options);
   }
 }
-
-/** @param {unknown} err */
-export const isOperationalError = (err) =>
-  err instanceof AppError && err.isOperational;

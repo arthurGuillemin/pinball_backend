@@ -98,8 +98,6 @@ describe('GameState — startGame', () => {
 
   it('lance une erreur si une partie est déjà en cours', () => {
     gameState.startGame('Arthur');
-    // On vérifie que l'erreur contient le message métier
-    // Le préfixe [GameState] est un détail d'implémentation
     expect(() => gameState.startGame('Bob')).toThrow(
       'une partie est déjà en cours'
     );

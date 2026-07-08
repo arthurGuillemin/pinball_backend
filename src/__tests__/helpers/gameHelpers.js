@@ -1,14 +1,5 @@
 import gameState from '../../game/state.js';
-
-export const REAL_SENSOR_IDS = [
-  'SENSOR_lane_right_1',
-  'SENSOR_lane_right_2',
-  'SENSOR_lane_left_1',
-  'SENSOR_lane_left_2',
-  'SENSOR_lane_rampe',
-  'SENSOR_lane_cave',
-  'SENSOR_lane_up_right',
-];
+import { VALID_SENSOR_IDS } from '../../game/state.js';
 
 /**
  * Helper partagé entre tous les suites de tests.
@@ -32,5 +23,5 @@ export function playUntilGameOver() {
 }
 
 export function activateAllSensors() {
-  REAL_SENSOR_IDS.forEach((s) => gameState.registerLightSensor(s));
+  VALID_SENSOR_IDS.forEach((s) => gameState.registerLightSensor(s));
 }

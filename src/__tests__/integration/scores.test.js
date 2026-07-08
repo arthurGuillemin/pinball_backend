@@ -69,10 +69,7 @@ describe('GET /api/scores/leaderboard', () => {
 
     const res = await request(app).get('/api/scores/leaderboard');
     expect(res.status).toBe(500);
-    // AppError(message, 500) → this.status = 'error' car statusCode >= 500
-    // (convention JSend : 'fail' = erreur client 4xx, 'error' = erreur serveur 5xx)
-    // errorHandler délègue maintenant à err.toJSON() au lieu de hardcoder 'fail',
-    // ce qui rend ce comportement cohérent avec le catch-all 'Unhandled error'
+
     expect(res.body.status).toBe('error');
     expect(res.body.message).toBe('DB connection failed');
   });

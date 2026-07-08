@@ -1,7 +1,6 @@
 import { ConflictError, ValidationError } from '../utils/appError.js';
 
 const INITIAL_BALLS = 3;
-const TOTAL_LIGHT_SENSORS = 7;
 const MAX_PLAYER_NAME_LENGTH = 20;
 
 const POINTS_CONFIG = {
@@ -14,7 +13,7 @@ const POINTS_CONFIG = {
 
 const VALID_AVATARS = ['cuphead', 'mugman', 'chalice'];
 
-const VALID_SENSOR_IDS = [
+export const VALID_SENSOR_IDS = [
   'SENSOR_lane_right_1',
   'SENSOR_lane_right_2',
   'SENSOR_lane_left_1',
@@ -47,19 +46,20 @@ class GameState {
     };
   }
 
-  // ── Lecture ─────────────────────────────────────────────────────────────────
+  //  Lecture ─────────────────────────────────────────────────────────────────
 
   getState() {
-    const copy = structuredClone(this.#state);
-    copy.lightsActivated = Array.from(this.#state.lightsActivated);
-    return copy;
+    return {
+      ...this.#state,
+      lightsActivated: Array.from(this.#state.lightsActivated),
+    };
   }
 
   isGameOver() {
     return !this.#state.isRunning;
   }
 
-  // ── Guard interne ───────────────────────────────────────────────────────────
+  //  Guard interne ───────────────────────────────────────────────────────────
 
   #assertRunning(context = 'action') {
     if (!this.#state.isRunning) {
@@ -69,13 +69,13 @@ class GameState {
     }
   }
 
-  // ── Cycle de vie ────────────────────────────────────────────────────────────
+  //  Cycle de vie ────────────────────────────────────────────────────────────
 
   /**
    * @throws {Error} si une partie est déjà en cours
    * @throws {Error} si playerName est vide ou trop long
    */
-  startGame(playerName = 'UnknownPlayer', avatar = 'cuphead') {
+  startGame(playerName, avatar = 'cuphead') {
     if (this.#state.isRunning) {
       throw new ConflictError(
         '[GameState] startGame impossible : une partie est déjà en cours'
@@ -109,7 +109,7 @@ class GameState {
     return this.getState();
   }
 
-  // ── Points ──────────────────────────────────────────────────────────────────
+  //  Points ──────────────────────────────────────────────────────────────────
 
   /**
    * @throws {Error} si la partie n'est pas en cours
@@ -159,7 +159,7 @@ class GameState {
     newLights.add(sensorId);
     let points = POINTS_CONFIG.LIGHT_SENSOR;
 
-    if (newLights.size === TOTAL_LIGHT_SENSORS) {
+    if (newLights.size === VALID_SENSOR_IDS.length) {
       points += POINTS_CONFIG.ALL_LIGHTS_BONUS;
       newLights.clear();
     }
