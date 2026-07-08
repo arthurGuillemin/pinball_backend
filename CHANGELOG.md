@@ -1,3 +1,14 @@
+# [1.15.0](https://github.com/arthurGuillemin/pinball_backend/compare/v1.14.0...v1.15.0) (2026-07-08)
+
+
+### Features
+
+* **app:** last clean bf code reveiw ([0e08c5b](https://github.com/arthurGuillemin/pinball_backend/commit/0e08c5b34c9d617b0f6fac671c743b01241ee56d))
+* **app:** update readme ([fb5081e](https://github.com/arthurGuillemin/pinball_backend/commit/fb5081e2d25ea2fbfddf501c78fe83d3c386f3d6))
+* **app:** update readme ([8caa654](https://github.com/arthurGuillemin/pinball_backend/commit/8caa654a11135a834fe95a9f214cc41614882d2b))
+* **code reveiw:** cleaning ([d44e235](https://github.com/arthurGuillemin/pinball_backend/commit/d44e2353f4504afea110cce64be29e879f012f21))
+* **review:** merge cleaning branch ([f898d74](https://github.com/arthurGuillemin/pinball_backend/commit/f898d742046b203fab4bd6119f876ff1a5d3c4df))
+
 # [1.14.0](https://github.com/arthurGuillemin/pinball_backend/compare/v1.13.0...v1.14.0) (2026-07-02)
 
 
