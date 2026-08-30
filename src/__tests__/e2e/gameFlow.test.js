@@ -135,7 +135,7 @@ describe('E2E — connexion WebSocket', () => {
 // ═══════════════════════════════════════════════════════════════════════════
 
 describe('E2E — start_game', () => {
-  it('démarre une partie et broadcast state_update', async () => {
+  it('démarre une partie et broadcast start_game', async () => {
     await resetServerState();
     const ws = await connectClient();
     await waitForMessage(ws);
@@ -143,7 +143,7 @@ describe('E2E — start_game', () => {
     send(ws, 'start_game', { playerName: 'Arthur', avatar: 'cuphead' });
     const msg = await waitForMessage(ws);
 
-    expect(msg.type).toBe('state_update');
+    expect(msg.type).toBe('start_game');
     expect(msg.state.isRunning).toBe(true);
     expect(msg.state.currentPlayer).toBe('Arthur');
     expect(msg.state.avatar).toBe('cuphead');
@@ -250,7 +250,7 @@ describe('E2E — ball_lost et game_over', () => {
 
     send(ws, 'ball_lost');
     const msg = await waitForMessage(ws);
-    expect(msg.type).toBe('state_update');
+    expect(msg.type).toBe('ball_lost');
     expect(msg.state.balls).toBe(2);
     await closeAndWait(ws);
   });

@@ -60,7 +60,7 @@ class ScreensWebSocketServer {
         { playerName: data.playerName, avatar: data.avatar },
         '[GAME] Nouvelle partie'
       );
-      this.#broadcast(ScreensWebSocketServer.WS_EVENTS.STATE_UPDATE, state);
+      this.#broadcast(ScreensWebSocketServer.MESSAGE_TYPES.START_GAME, state);
     } catch (err) {
       logger.warn({ err }, '[GAME] startGame impossible');
     }
@@ -70,7 +70,7 @@ class ScreensWebSocketServer {
     try {
       const state = gameState.registerBumperHit();
       logger.info({ score: state.score }, '[GAME] Bumper hit');
-      this.#broadcast(ScreensWebSocketServer.WS_EVENTS.STATE_UPDATE, state);
+      this.#broadcast(ScreensWebSocketServer.MESSAGE_TYPES.BUMPER_HIT, state);
     } catch (err) {
       logger.warn({ err }, '[GAME] handleBumperHit impossible');
     }
@@ -80,7 +80,10 @@ class ScreensWebSocketServer {
     try {
       const state = gameState.registerSlingshotHit();
       logger.info({ score: state.score }, '[GAME] Slingshot hit');
-      this.#broadcast(ScreensWebSocketServer.WS_EVENTS.STATE_UPDATE, state);
+      this.#broadcast(
+        ScreensWebSocketServer.MESSAGE_TYPES.SLINGSHOT_HIT,
+        state
+      );
     } catch (err) {
       logger.warn({ err }, '[GAME] handleSlingshotHit impossible');
     }
@@ -93,7 +96,7 @@ class ScreensWebSocketServer {
         { sensorId: data.sensorId, score: state.score },
         '[GAME] Capteur activé'
       );
-      this.#broadcast(ScreensWebSocketServer.WS_EVENTS.STATE_UPDATE, state);
+      this.#broadcast(ScreensWebSocketServer.MESSAGE_TYPES.LIGHT_SENSOR, state);
     } catch (err) {
       logger.warn({ err }, '[GAME] handleLightSensor impossible');
     }
@@ -106,7 +109,7 @@ class ScreensWebSocketServer {
         { score: state.score },
         '[GAME] Toutes les cartes retournées'
       );
-      this.#broadcast(ScreensWebSocketServer.WS_EVENTS.STATE_UPDATE, state);
+      this.#broadcast(ScreensWebSocketServer.MESSAGE_TYPES.CARDS_DOWN, state);
     } catch (err) {
       logger.warn({ err }, '[GAME] handleCardsDown impossible');
     }
@@ -136,7 +139,7 @@ class ScreensWebSocketServer {
 
         this.#broadcast(ScreensWebSocketServer.WS_EVENTS.GAME_OVER, state);
       } else {
-        this.#broadcast(ScreensWebSocketServer.WS_EVENTS.STATE_UPDATE, state);
+        this.#broadcast(ScreensWebSocketServer.MESSAGE_TYPES.BALL_LOST, state);
       }
     } catch (err) {
       logger.warn({ err }, '[GAME] handleBallLost impossible');
